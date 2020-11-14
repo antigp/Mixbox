@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.3
  
 import PackageDescription
 import Foundation
@@ -67,6 +67,10 @@ let package = Package(
             .package(name: "GCDWebServer", url: "https://github.com/SlaunchaMan/GCDWebServer.git", .revision("5cc010813d797c3f40557c740a4f620bf84da4dd")),
     ],
     targets: [
+        .binaryTarget(
+            name: "XCTAutomationSupport",
+            path: "artifacts/XCTAutomationSupport.xcframework"
+        ),     
         // MARK: - MixboxAnyCodable
         .target(
             name: "MixboxAnyCodable",
@@ -96,7 +100,8 @@ let package = Package(
                     .target(name: "MixboxUiTestsFoundation"),
                     .target(name: "MixboxIpcSbtuiClient"),
                     .target(name: "MixboxDi"),
-                    .target(name: "MixboxBlack_objc")
+                    .target(name: "MixboxBlack_objc"),
+                    .target(name: "XCTAutomationSupport")
                 ],
                 path: "Frameworks/Black",
                 exclude: ["Utils/ActionDependencies/EventGenerator/XcuiEventGeneratorObjC"],
@@ -195,7 +200,8 @@ let package = Package(
                     .target(name: "MixboxUiKit"),
                     .target(name: "MixboxInAppServices"),
                     .target(name: "MixboxDi"),
-                    .target(name: "MixboxGray_objc")
+                    .target(name: "MixboxGray_objc"),
+                    .target(name: "XCTAutomationSupport")
                 ],
                 path: "Frameworks/Gray",
                 exclude: ["Utils/PrivateHeaders"],
@@ -379,7 +385,8 @@ let package = Package(
                     .target(name: "MixboxFoundation"),
                     .target(name: "MixboxUiKit"),
                     .target(name: "MixboxTestsFoundation_objc"),
-                    .product(name: "SQLite", package: "SQLite.swift")
+                    .product(name: "SQLite", package: "SQLite.swift"),
+                    .target(name: "XCTAutomationSupport")
                 ],
                 path: "Frameworks/TestsFoundation",
                 exclude: ["ObjcSources", "PrivateHeaders"],
