@@ -2,6 +2,8 @@
 import Foundation
 import UIKit
 
+import Foundation
+
 // Replicates URLRequest
 public final class BridgedUrlRequest: Codable {
     public let url: URL?

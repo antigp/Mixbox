@@ -8,7 +8,8 @@ public final class PageObjectElementInteractionPerformerImpl: PageObjectElementI
     private let dateProvider: DateProvider
     private let screenshotAttachmentsMaker: ScreenshotAttachmentsMaker
     private let stepLogger: StepLogger
-    private let signpostActivityLogger: SignpostActivityLogger
+    private let performanceLogger: PerformanceLogger
+    private let interactionFailureDebugger: InteractionFailureDebugger
     
     public init(
         testFailureRecorder: TestFailureRecorder,
@@ -17,7 +18,8 @@ public final class PageObjectElementInteractionPerformerImpl: PageObjectElementI
         dateProvider: DateProvider,
         elementInteractionDependenciesFactory: ElementInteractionDependenciesFactory,
         elementSettings: ElementSettings,
-        signpostActivityLogger: SignpostActivityLogger)
+        performanceLogger: PerformanceLogger,
+        interactionFailureDebugger: InteractionFailureDebugger)
     {
         self.testFailureRecorder = testFailureRecorder
         self.dateProvider = dateProvider
@@ -25,7 +27,8 @@ public final class PageObjectElementInteractionPerformerImpl: PageObjectElementI
         self.elementSettings = elementSettings
         self.screenshotAttachmentsMaker = screenshotAttachmentsMaker
         self.stepLogger = stepLogger
-        self.signpostActivityLogger = signpostActivityLogger
+        self.performanceLogger = performanceLogger
+        self.interactionFailureDebugger = interactionFailureDebugger
     }
     
     public func perform(
@@ -49,16 +52,17 @@ public final class PageObjectElementInteractionPerformerImpl: PageObjectElementI
             dateProvider: dateProvider,
             elementInteractionDependenciesFactory: elementInteractionDependenciesFactory,
             elementSettings: settings,
-            signpostActivityLogger: signpostActivityLogger
+            performanceLogger: performanceLogger,
+            interactionFailureDebugger: interactionFailureDebugger
         )
     }
     
     // MARK: - Private
     
     private func logPerformance<T>(interactionType: ElementInteraction.Type, body: () -> T) -> T {
-        return signpostActivityLogger.log(
-            name: "performing root interaction",
-            message: { "\(interactionType)" },
+        return performanceLogger.log(
+            staticName: "performing root interaction",
+            dynamicName: { "\(interactionType)" },
             body: body
         )
     }
@@ -129,7 +133,8 @@ public final class PageObjectElementInteractionPerformerImpl: PageObjectElementI
         if interactionPerformingSettings.failTest {
             return FailureHandlingElementInteractionWithDependenciesPerformer(
                 nestedInteractionPerformer: loggingElementInteractionWithDependenciesPerformer,
-                testFailureRecorder: testFailureRecorder
+                testFailureRecorder: testFailureRecorder,
+                interactionFailureDebugger: interactionFailureDebugger
             )
         } else {
             return loggingElementInteractionWithDependenciesPerformer

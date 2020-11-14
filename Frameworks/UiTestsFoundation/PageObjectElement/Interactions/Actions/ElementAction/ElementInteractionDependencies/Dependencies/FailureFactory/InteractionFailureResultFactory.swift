@@ -8,7 +8,7 @@ public protocol InteractionFailureResultFactory: class {
     func elementIsNotSufficientlyVisibleResult(
         percentageOfVisibleArea: CGFloat,
         minimalPercentageOfVisibleArea: CGFloat,
-        scrollingFailureMessage: String?)
+        potentialCauseOfFailure: String?)
         -> InteractionResult
     
     func elementIsNotFoundResult()

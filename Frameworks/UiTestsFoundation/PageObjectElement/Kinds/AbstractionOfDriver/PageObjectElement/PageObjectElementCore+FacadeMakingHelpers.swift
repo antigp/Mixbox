@@ -1,6 +1,8 @@
 import MixboxFoundation
 import Foundation
 import UIKit
+import MixboxTestsFoundation
+
 
 // Helpers for making facades
 extension PageObjectElementCore {

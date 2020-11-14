@@ -7,6 +7,7 @@ public protocol Scroller: class {
         snapshot: ElementSnapshot,
         minimalPercentageOfVisibleArea: CGFloat,
         expectedIndexOfSnapshotInResolvedElementQuery: Int,
-        resolvedElementQuery: ResolvedElementQuery)
+        resolvedElementQuery: ResolvedElementQuery,
+        interactionCoordinates: InteractionCoordinates?)
         -> ScrollingResult
 }

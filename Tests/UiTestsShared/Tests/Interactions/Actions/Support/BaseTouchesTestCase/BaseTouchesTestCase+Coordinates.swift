@@ -1,5 +1,6 @@
-import TestsIpc
+import MixboxIpcCommon
 import MixboxFoundation
+import UIKit
 
 extension BaseTouchesTestCase {
     var relativeCoordinatesAccuracy: CGFloat {

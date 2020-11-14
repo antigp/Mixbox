@@ -104,10 +104,10 @@ public final class SbtuiNetworkRecordsProvider:
 
 extension SBTMonitoredNetworkRequest: MonitoredNetworkRequest {
     public func requestJson() -> [String : Any]? {
-        return requestJSON() as? [String : Any]
+        return requestJSON()
     }
     
     public func responseJson() -> [String : Any]? {
-        return responseJSON() as? [String : Any]
+        return responseJSON()
     }
 }

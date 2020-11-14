@@ -1,5 +1,6 @@
 import MixboxFoundation
 import Foundation
+import MixboxIpcCommon
 import UIKit
 
 extension ElementWithUi {

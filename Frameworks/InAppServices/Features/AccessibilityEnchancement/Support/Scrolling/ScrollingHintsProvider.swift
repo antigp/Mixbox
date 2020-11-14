@@ -185,7 +185,7 @@ final class ScrollingHintsProvider {
                             ScrollingInstruction(
                                 scrollView: scrollView,
                                 targetRect: frame(ofView: viewToScrollTo, inView: scrollView),
-                                targetViewUniqueIdentifier: viewToScrollTo.uniqueIdentifier
+                                targetViewUniqueIdentifier: viewToScrollTo.mb_testability_uniqueIdentifier()
                             )
                         )
                         

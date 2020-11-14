@@ -1,3 +1,5 @@
+import UIKit
+
 // You can use this class in your tests.
 //
 // Consider using your own base class if you want to customize dependencies of your page objects.
@@ -27,6 +29,7 @@
 // Such customization is used in tests for Avito app.
 //
 // TODO: Add default base class called `BasePageObjects`?
+// TODO: Actually this class can not be used in a real project if `elementFactory` is polymorphic. Invent a way for this case.
 //
 import Foundation
 import UIKit
@@ -36,8 +39,7 @@ open class BasePageObject: PageObject, ElementFactory {
     
     public init(pageObjectDependenciesFactory: PageObjectDependenciesFactory) {
         self.elementFactory = ElementFactoryImpl(
-            pageObjectElementDependenciesFactory: pageObjectDependenciesFactory.pageObjectElementDependenciesFactory(),
-            elementSettingsDefaultsProvider: pageObjectDependenciesFactory.elementSettingsDefaultsProvider
+            pageObjectDependenciesFactory: pageObjectDependenciesFactory
         )
     }
     
@@ -72,5 +74,9 @@ open class BasePageObject: PageObject, ElementFactory {
     
     public func with(percentageOfVisibleArea: CGFloat?) -> ElementFactory {
         return elementFactory.with(percentageOfVisibleArea: percentageOfVisibleArea)
+    }
+    
+    public func with(pixelPerfectVisibilityCheck: Bool?) -> ElementFactory {
+        return elementFactory.with(pixelPerfectVisibilityCheck: pixelPerfectVisibilityCheck)
     }
 }

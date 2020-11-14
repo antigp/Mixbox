@@ -1,4 +1,5 @@
 import Foundation
+import MixboxIpcCommon
 import UIKit
 
 public enum SwipeActionEndPoint {

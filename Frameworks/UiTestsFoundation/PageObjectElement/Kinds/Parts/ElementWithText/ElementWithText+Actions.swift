@@ -2,6 +2,7 @@ import MixboxTestsFoundation
 import MixboxFoundation
 import Foundation
 import UIKit
+import MixboxIpcCommon
 
 public extension ElementWithText {
     // Makes text be inside text input.
@@ -10,6 +11,7 @@ public extension ElementWithText {
         _ text: String,
         elementSelectionMethod: SetTextActionFactory.ElementSelectionMethod = .default,
         inputMethod: SetTextActionFactory.InputMethod = .default,
+        textEditingActionMode: TextEditingActionMode = .replace,
         normalizedCoordinate: CGPoint? = nil,
         absoluteOffset: CGVector? = nil,
         failTest: Bool = true,
@@ -21,7 +23,7 @@ public extension ElementWithText {
             text: text,
             elementSelectionMethod: elementSelectionMethod,
             inputMethod: inputMethod,
-            textEditingActionMode: .replace,
+            textEditingActionMode: textEditingActionMode,
             interactionCoordinates: InteractionCoordinates(
                 normalizedCoordinate: normalizedCoordinate,
                 absoluteOffset: absoluteOffset

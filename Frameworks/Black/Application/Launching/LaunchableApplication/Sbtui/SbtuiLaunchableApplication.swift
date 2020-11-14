@@ -7,6 +7,7 @@ import SBTUITestTunnelCommon
 #else
 import SBTUITestTunnel
 #endif
+import MixboxIpc
 import MixboxIpcSbtuiClient
 import MixboxFoundation
 
@@ -18,6 +19,7 @@ public final class SbtuiLaunchableApplication: LaunchableApplication {
     private let testFailureRecorder: TestFailureRecorder
     private let sbtuiStubApplier: SbtuiStubApplier
     private let networkRecordsProvider: SbtuiNetworkRecordsProvider
+    private let performanceLogger: PerformanceLogger
     
     public init(
         tunneledApplication: SBTUITunneledApplication,
@@ -25,11 +27,13 @@ public final class SbtuiLaunchableApplication: LaunchableApplication {
         testFailureRecorder: TestFailureRecorder,
         bundleResourcePathProvider: BundleResourcePathProvider,
         waiter: RunLoopSpinningWaiter,
-        networkReplayingObserver: NetworkReplayingObserver)
+        networkReplayingObserver: NetworkReplayingObserver,
+        performanceLogger: PerformanceLogger)
     {
         self.tunneledApplication = tunneledApplication
         self.applicationLifecycleObservable = applicationLifecycleObservable
         self.testFailureRecorder = testFailureRecorder
+        self.performanceLogger = performanceLogger
         
         self.sbtuiStubApplier = SbtuiStubApplierImpl(
             tunneledApplication: tunneledApplication,
@@ -102,8 +106,11 @@ public final class SbtuiLaunchableApplication: LaunchableApplication {
         }
         
         return LaunchedApplicationImpl(
-            ipcClient: SbtuiIpcClient(
-                application: tunneledApplication
+            ipcClient: PerformanceLoggingIpcClient(
+                ipcClient: SbtuiIpcClient(
+                    application: tunneledApplication
+                ),
+                performanceLogger: performanceLogger
             ),
             ipcRouter: nil
         )

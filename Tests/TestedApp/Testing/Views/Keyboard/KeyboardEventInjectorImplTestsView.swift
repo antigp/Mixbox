@@ -6,12 +6,12 @@ import MixboxFoundation
 
 public final class KeyboardEventInjectorImplTestsView:
     UIView,
-    InitializableWithTestingViewControllerSettings,
+    TestingView,
     UITextViewDelegate
 {
     private var textView = UITextView()
     
-    init(testingViewControllerSettings: TestingViewControllerSettings) {
+    public init(testingViewControllerSettings: TestingViewControllerSettings) {
         super.init(frame: .zero)
         
         testingViewControllerSettings.viewIpc.registerResetUiMethod(view: self) { view in
@@ -57,6 +57,6 @@ public final class KeyboardEventInjectorImplTestsView:
     }
     
     private func setTextViewIsFocused(_ isFocused: Bool) {
-        textView.testability_customValues["isFocused"] = isFocused
+        textView.mb_testability_customValues["isFocused"] = isFocused
     }
 }

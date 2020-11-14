@@ -1,7 +1,19 @@
 import Foundation
 import UIKit
+import MixboxIpcCommon
 
 public protocol ElementVisibilityChecker: class {
-    func percentageOfVisibleArea(snapshot: ElementSnapshot) -> CGFloat
-    func percentageOfVisibleArea(elementUniqueIdentifier: String) -> CGFloat
+    func checkVisibility(
+        snapshot: ElementSnapshot,
+        interactionCoordinates: InteractionCoordinates?,
+        useHundredPercentAccuracy: Bool)
+        throws
+        -> ElementVisibilityCheckerResult
+    
+    func checkVisibility(
+        elementUniqueIdentifier: String,
+        interactionCoordinates: InteractionCoordinates?,
+        useHundredPercentAccuracy: Bool)
+        throws
+        -> ElementVisibilityCheckerResult
 }

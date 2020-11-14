@@ -1,6 +1,8 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 import Foundation
 
+import UIKit
+
 // TODO: Clean-up automatically (on deinit)
 // TODO: Type-erased identifier? (Hashable/Codable; e.g. AnyHashable & AnyCodable)
 public final class IpcObjectId: Codable, Hashable {

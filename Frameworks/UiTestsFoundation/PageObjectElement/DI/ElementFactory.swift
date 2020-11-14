@@ -18,6 +18,7 @@ public protocol ElementFactory: class {
     func with(interactionMode: InteractionMode?) -> ElementFactory
     func with(interactionTimeout: TimeInterval?) -> ElementFactory
     func with(percentageOfVisibleArea: CGFloat?) -> ElementFactory
+    func with(pixelPerfectVisibilityCheck: Bool?) -> ElementFactory
 }
 
 // Convenient functions

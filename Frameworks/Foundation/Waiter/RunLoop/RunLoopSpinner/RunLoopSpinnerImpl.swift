@@ -2,6 +2,9 @@
 import Foundation
 import QuartzCore
 
+import Foundation
+import QuartzCore
+
 public final class RunLoopSpinnerImpl: RunLoopSpinner {
     private var spinning: Bool
     

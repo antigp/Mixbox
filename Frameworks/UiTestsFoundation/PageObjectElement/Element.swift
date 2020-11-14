@@ -71,4 +71,8 @@ extension Element {
     public func with(percentageOfVisibleArea: CGFloat) -> Self {
         return with(settings: core.settings.with(percentageOfVisibleArea: percentageOfVisibleArea))
     }
+    
+    public func with(pixelPerfectVisibilityCheck: Bool) -> Self {
+        return with(settings: core.settings.with(pixelPerfectVisibilityCheck: pixelPerfectVisibilityCheck))
+    }
 }

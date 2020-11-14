@@ -41,9 +41,17 @@ final class PageObjects: BasePageObjects {
     
     var scrollingTriesToMakeViewFullyVisibleTestsView: MainAppScreen<ScrollingTriesToMakeViewFullyVisibleTestsViewPageObject> { return mainAppScreen() }
     
+    var interactionsUseVisiblePointTestsViewPageObject: MainAppScreen<InteractionsUseVisiblePointTestsViewPageObject> { return mainAppScreen() }
+    
+    var ipcTestingView: MainAppScreen<IpcTestingViewPageObject> { return mainAppScreen() }
+    
+    var nonViewElementsTestsMapView: MainAppScreen<NonViewElementsTestsMapViewPageObject> { return mainAppScreen() }
+    var nonViewElementsTestsWebView: MainAppScreen<NonViewElementsTestsWebViewPageObject> { return mainAppScreen() }
+    var nonViewElementsTestsCustomDrawingView: MainAppScreen<NonViewElementsTestsCustomDrawingViewPageObject> { return mainAppScreen() }
+    
     private func mainAppScreen<PageObjectType>() -> MainAppScreen<PageObjectType> {
         return MainAppScreen(
-            real: apps.mainUiKitHierarchy.pageObject(),
+            uikit: apps.mainUiKitHierarchy.pageObject(),
             xcui: apps.mainXcuiHierarchy.pageObject(),
             default: apps.mainDefaultHierarchy.pageObject()
         )

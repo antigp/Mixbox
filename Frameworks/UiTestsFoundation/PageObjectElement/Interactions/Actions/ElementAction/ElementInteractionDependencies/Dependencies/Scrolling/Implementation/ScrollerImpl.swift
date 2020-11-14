@@ -25,13 +25,17 @@ public final class ScrollerImpl: Scroller {
         self.elementSettings = elementSettings
     }
     
+    // swiftlint:disable:next function_body_length
     public func scrollIfNeeded(
         snapshot: ElementSnapshot,
         minimalPercentageOfVisibleArea: CGFloat,
         expectedIndexOfSnapshotInResolvedElementQuery: Int,
-        resolvedElementQuery: ResolvedElementQuery)
+        resolvedElementQuery: ResolvedElementQuery,
+        interactionCoordinates: InteractionCoordinates?)
         -> ScrollingResult
     {
+        let useHundredPercentAccuracyInVisibilityCheck = elementSettings.pixelPerfectVisibilityCheck
+        
         // TODO: Better code. These lines just disable scrolling with minimal number of lines and minimal consequences.
         // (at the moment the code was written, we all know what can happen with code if it will live for long)
         if elementSettings.scrollMode == .none {
@@ -51,30 +55,49 @@ public final class ScrollerImpl: Scroller {
             let frame = applicationFrameProvider.applicationFrame
             
             if frame.mb_intersectionOrNil(snapshot.frameRelativeToScreen) != nil {
-                // Element intersects screen.
-                // We don't care if it is fully on screen or partially.
-                // We just filter out the case when it is completely off screen.
-                //
-                // If element is partially on screen it might be "sufficiently visible" (and vice versa).
-                // If it is fully on screen it can also be either sufficiently visible ot not.
-                //
-                // So in any case we must do the check if it is not comopletely off screen.
-                let percentageOfVisibleArea = elementVisibilityChecker.percentageOfVisibleArea(
-                    snapshot: snapshot
-                )
-                
-                let elementIsSufficientlyVisible = percentageOfVisibleArea >= minimalPercentageOfVisibleArea
-                
-                if elementIsSufficientlyVisible {
-                    // sufficiently visible
+                // If `minimalPercentageOfVisibleArea` is 0 then condition
+                // `percentageOfVisibleArea >= minimalPercentageOfVisibleArea` will be always true.
+                // So there is no need to perform the check.
+                if minimalPercentageOfVisibleArea > 0 {
+                    // Element intersects screen.
+                    // We don't care if it is fully on screen or partially.
+                    // We just filter out the case when it is completely off screen.
+                    //
+                    // If element is partially on screen it might be "sufficiently visible" (and vice versa).
+                    // If it is fully on screen it can also be either sufficiently visible ot not.
+                    //
+                    // So in any case we must do the check if it is not completely off screen.
+                    let visibilityCheckResultOrNil = try? elementVisibilityChecker.checkVisibility(
+                        snapshot: snapshot,
+                        interactionCoordinates: interactionCoordinates,
+                        useHundredPercentAccuracy: useHundredPercentAccuracyInVisibilityCheck
+                    )
                     
+                    if let visibilityCheckResult = visibilityCheckResultOrNil {
+                        let percentageOfVisibleArea = visibilityCheckResult.percentageOfVisibleArea
+                        
+                        let elementIsSufficientlyVisible = percentageOfVisibleArea >= minimalPercentageOfVisibleArea
+
+                        if elementIsSufficientlyVisible {
+                            // sufficiently visible
+                            
+                            return ScrollingResult(
+                                status: .alreadyVisible(visibilityCheckResult),
+                                updatedSnapshot: snapshot,
+                                updatedResolvedElementQuery: resolvedElementQuery
+                            )
+                        } else {
+                            // not sufficiently visible
+                        }
+                    } else {
+                        // not sufficiently visible
+                    }
+                } else {
                     return ScrollingResult(
-                        status: .alreadyVisible(percentageOfVisibleArea: percentageOfVisibleArea),
+                        status: .alreadyInHierarchyAndVisibilityCheckIsNotRequired,
                         updatedSnapshot: snapshot,
                         updatedResolvedElementQuery: resolvedElementQuery
                     )
-                } else {
-                    // not sufficiently visible
                 }
             } else {
                 // off screen / can not be visible
@@ -90,7 +113,9 @@ public final class ScrollerImpl: Scroller {
             minimalPercentageOfVisibleArea: minimalPercentageOfVisibleArea,
             applicationFrameProvider: applicationFrameProvider,
             eventGenerator: eventGenerator,
-            elementResolver: elementResolver
+            elementResolver: elementResolver,
+            interactionCoordinates: interactionCoordinates,
+            useHundredPercentAccuracyInVisibilityCheckForTargetElement: useHundredPercentAccuracyInVisibilityCheck
         )
         
         return scrollingContext.scrollIfNeeded()

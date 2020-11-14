@@ -3,7 +3,6 @@ import Foundation
 import CiFoundation
 import Bash
 import SingletonHell
-import Models
 import RemoteFiles
 import Destinations
 
@@ -47,8 +46,6 @@ public final class EmceeBlackBoxTestRunner: BlackBoxTestRunner {
     {
         let emcee = try emceeProvider.emcee()
         
-        let fbxctestUrlString = try environmentProvider.getOrThrow(env: Env.MIXBOX_CI_EMCEE_FBXCTEST_URL)
-        
         let reportsPath = try environmentProvider.getOrThrow(env: Env.MIXBOX_CI_REPORTS_PATH)
         let junit = "\(reportsPath)/junit.xml"
         let trace = "\(reportsPath)/trace.json"
@@ -58,7 +55,6 @@ public final class EmceeBlackBoxTestRunner: BlackBoxTestRunner {
                 jobId: UUID().uuidString,
                 testArgFile: testArgFile(
                     mixboxTestDestinationConfigurations: mixboxTestDestinationConfigurations,
-                    fbxctestUrlString: fbxctestUrlString,
                     xctestBundle: xctestBundle,
                     runnerPath: runnerPath,
                     appPath: appPath,
@@ -68,7 +64,6 @@ public final class EmceeBlackBoxTestRunner: BlackBoxTestRunner {
                 queueServerDestination: fileDownloader.download(url: sharedQueueDeploymentDestinationsUrl),
                 queueServerRunConfigurationLocation: queueServerRunConfigurationUrl.absoluteString,
                 tempFolder: temporaryFileProvider.temporaryFilePath(),
-                fbxctest: fbxctestUrlString,
                 junit: junit,
                 trace: trace
             )
@@ -77,7 +72,6 @@ public final class EmceeBlackBoxTestRunner: BlackBoxTestRunner {
     
     private func testArgFile(
         mixboxTestDestinationConfigurations: [MixboxTestDestinationConfiguration],
-        fbxctestUrlString: String,
         xctestBundle: String,
         runnerPath: String,
         appPath: String,
@@ -92,9 +86,6 @@ public final class EmceeBlackBoxTestRunner: BlackBoxTestRunner {
                 appPath: appPath,
                 additionalAppPaths: additionalAppPaths,
                 xctestBundlePath: xctestBundle,
-                fbxctestUrl: try URL.from(
-                    string: fbxctestUrlString
-                ),
                 mixboxTestDestinationConfigurations: mixboxTestDestinationConfigurations,
                 environment: environment(),
                 testType: .uiTest,
@@ -105,9 +96,15 @@ public final class EmceeBlackBoxTestRunner: BlackBoxTestRunner {
     }
     
     private func environment() -> [String: String] {
-        return [
+        var environment = [
             Env.MIXBOX_CI_USES_FBXCTEST.rawValue: "true",
             Env.MIXBOX_CI_IS_CI_BUILD.rawValue: "true"
         ]
+        
+        environment[Env.MIXBOX_CI_GRAPHITE_HOST.rawValue] = environmentProvider.environment[Env.MIXBOX_CI_GRAPHITE_HOST.rawValue]
+        environment[Env.MIXBOX_CI_GRAPHITE_PORT.rawValue] = environmentProvider.environment[Env.MIXBOX_CI_GRAPHITE_PORT.rawValue]
+        environment[Env.MIXBOX_CI_GRAPHITE_PREFIX.rawValue] = environmentProvider.environment[Env.MIXBOX_CI_GRAPHITE_PREFIX.rawValue]
+        
+        return environment
     }
 }

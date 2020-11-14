@@ -3,13 +3,14 @@ import MixboxUiKit
 import MixboxFoundation
 import MixboxIpcCommon
 import MixboxIpc
+import UIKit
 
 // This view contains scroll with high inertia and a very small button.
 // This view is used to check that even if UI is moving, actions will wait until it becomes stable.
 // High inertia of scroll view and small size of button increases chances of failing a test if there is an issue with waiting.
 public final class WaitingForQuiescenceTestsView:
     UIView,
-    InitializableWithTestingViewControllerSettings,
+    TestingView,
     UIKeyInput
 {
     // Buttons without special layout
@@ -29,7 +30,11 @@ public final class WaitingForQuiescenceTestsView:
     
     private weak var navigationController: UINavigationController?
     
-    init(testingViewControllerSettings: TestingViewControllerSettings) {
+    public static var viewControllerContainerType: ViewControllerContainerType {
+        return .navigationController
+    }
+    
+    public init(testingViewControllerSettings: TestingViewControllerSettings) {
         super.init(frame: .zero)
         
         testingViewControllerSettings.viewIpc.registerAsyncResetUiMethod(view: self, argumentType: WaitingForQuiescenceTestsViewConfiguration.self) { view, configuration, completion in
@@ -146,7 +151,6 @@ public final class WaitingForQuiescenceTestsView:
     
     private func addTapIndicatorButton(id: String) {
         let tapIndicatorButton = TapIndicatorButton()
-        tapIndicatorButton.backgroundColor = .blue
         tapIndicatorButton.accessibilityIdentifier = id
         tapIndicatorButtons.append(tapIndicatorButton)
         scrollView.addSubview(tapIndicatorButton)
@@ -193,7 +197,7 @@ public final class WaitingForQuiescenceTestsView:
             guard let strongSelf = self else { return }
             
             strongSelf.becomeFirstResponder()
-            showKeyboardButton?.testability_customValues["keyboard_shown"] = true
+            showKeyboardButton?.mb_testability_customValues["keyboard_shown"] = true
         }
         actionButtons.append(showKeyboardButton)
         scrollView.addSubview(showKeyboardButton)
@@ -202,7 +206,7 @@ public final class WaitingForQuiescenceTestsView:
         accessoryViewButton.backgroundColor = .red
         accessoryViewButton.accessibilityIdentifier = "accessoryViewButton"
         accessoryViewButton.onTap = { [weak accessoryViewButton] in
-            accessoryViewButton?.testability_customValues["tapped"] = true
+            accessoryViewButton?.mb_testability_customValues["isTapped"] = true
         }
         self.accessoryViewButton = accessoryViewButton
     }
@@ -213,14 +217,14 @@ public final class WaitingForQuiescenceTestsView:
         button.setTitle("Button Title", for: .normal)
         button.accessibilityIdentifier = id
         button.onTap = { [weak button] in
-            button?.testability_customValues["tap_count"] = (button?.testability_customValues["tap_count"] ?? 0) + 1
+            button?.mb_testability_customValues["tap_count"] = (button?.mb_testability_customValues["tap_count"] ?? 0) + 1
             
             let animation = CABasicAnimation()
             animation.duration = 15.0
             animation.delegate = TrackingCAAnimationDelegate(
                 onStart: { _ in },
                 onFinish: { _, _ in
-                    button?.testability_customValues["core_animation_has_finished"] = true
+                    button?.mb_testability_customValues["core_animation_has_finished"] = true
                 }
             )
             

@@ -1,6 +1,8 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 import UIKit
 
+import UIKit
+
 public final class UiDeviceIosVersionProvider: IosVersionProvider {
     private let uiDevice: UIDevice
     

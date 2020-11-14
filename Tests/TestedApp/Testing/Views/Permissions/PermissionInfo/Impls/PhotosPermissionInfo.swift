@@ -7,6 +7,7 @@ final class PhotosPermissionInfo: PermissionInfo {
     
     func authorizationStatus() -> String {
         let status = PHPhotoLibrary.authorizationStatus()
+        
         switch status {
         case .authorized:
             return "authorized"
@@ -16,6 +17,14 @@ final class PhotosPermissionInfo: PermissionInfo {
             return "notDetermined"
         case .restricted:
             return "restricted"
+            
+            #if compiler(>=5.3)
+            // Xcode 12+
+            
+        case .limited:
+            return "limited"
+            
+            #endif
         @unknown default:
             return "UNKNOWN: \(status)"
         }

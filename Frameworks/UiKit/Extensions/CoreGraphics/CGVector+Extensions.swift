@@ -1,6 +1,8 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 import UIKit
 
+import UIKit
+
 extension CGVector {
     public static func mb_init(start: CGPoint, end: CGPoint) -> CGVector {
         return self.init(

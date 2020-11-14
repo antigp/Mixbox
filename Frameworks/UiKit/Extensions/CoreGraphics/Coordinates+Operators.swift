@@ -1,7 +1,10 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 import UIKit
 
-// E.g.: For offsetting
+import UIKit
+
+// For offsetting
+
 public func +(left: CGPoint, right: CGVector) -> CGPoint {
     return CGPoint(
         x: left.x + right.dx,
@@ -9,12 +12,17 @@ public func +(left: CGPoint, right: CGVector) -> CGPoint {
     )
 }
 
-// E.g.: For offsetting
 public func +(left: CGVector, right: CGPoint) -> CGPoint {
     return right + left
 }
 
-// E.g.: For offsetting
+public func +(left: CGPoint, right: CGPoint) -> CGPoint {
+    return CGPoint(
+        x: left.x + right.x,
+        y: left.y + right.y
+    )
+}
+
 public func -(left: CGPoint, right: CGVector) -> CGPoint {
     return CGPoint(
         x: left.x - right.dx,
@@ -22,7 +30,8 @@ public func -(left: CGPoint, right: CGVector) -> CGPoint {
     )
 }
 
-// E.g.: For calculating offset
+// For calculating offset
+
 public func -(left: CGPoint, right: CGPoint) -> CGVector {
     return CGVector(
         dx: left.x - right.x,
@@ -96,6 +105,28 @@ public func /(left: CGVector, right: CGSize) -> CGVector {
         dx: left.dx / right.width,
         dy: left.dy / right.height
     )
+}
+
+public func *(left: CGRect, right: CGFloat) -> CGRect {
+    return CGRect(
+        origin: left.origin * right,
+        size: left.size * right
+    )
+}
+
+public func *(left: CGFloat, right: CGRect) -> CGRect {
+    return right * left
+}
+
+public func *(left: CGPoint, right: CGFloat) -> CGPoint {
+    return CGPoint(
+        x: left.x * right,
+        y: left.y * right
+    )
+}
+
+public func *(left: CGFloat, right: CGPoint) -> CGPoint {
+    return right * left
 }
 
 #endif

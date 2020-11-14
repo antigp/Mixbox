@@ -1,7 +1,9 @@
+import UIKit
+
 public protocol ElementSimpleGesturesProvider: class {
     func elementSimpleGestures(
         elementSnapshot: ElementSnapshot,
-        interactionCoordinates: InteractionCoordinates)
+        pointOnScreen: CGPoint)
         throws
         -> ElementSimpleGestures
 }

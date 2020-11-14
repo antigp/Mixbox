@@ -2,6 +2,7 @@ import MixboxFoundation
 import XCTest
 import MixboxTestsFoundation_objc
 
+
 public final class BuiltApplicationBundleProvider: ApplicationBundleProvider {
     private let application: XCUIApplication
     

@@ -2,6 +2,8 @@
 import Foundation
 import UIKit
 
+import UIKit
+
 public final class ViewHierarchyElement: Codable, CustomDebugStringConvertible {
     public let frame: CGRect
     

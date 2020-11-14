@@ -1,5 +1,5 @@
-// swift-tools-version:5.0
-// swiftlint:disable trailing_comma
+// swift-tools-version:5.2
+// swiftlint:disable trailing_comma file_length
 
 // This file is generated via MakePackage python code. Do not modify it.
 
@@ -21,6 +21,18 @@ let package = Package(
             name: "TeamcityBlackBoxTestsBuild",
             targets: [
                 "TeamcityBlackBoxTestsBuild"
+            ]
+        ),
+        .executable(
+            name: "TeamcityUiTestsDemoBuild",
+            targets: [
+                "TeamcityUiTestsDemoBuild"
+            ]
+        ),
+        .executable(
+            name: "TeamcityReleaseToCocoapodsBuild",
+            targets: [
+                "TeamcityReleaseToCocoapodsBuild"
             ]
         ),
         .executable(
@@ -54,12 +66,6 @@ let package = Package(
             ]
         ),
         .executable(
-            name: "TeamcityOversimplifiedDemoBuild",
-            targets: [
-                "TeamcityOversimplifiedDemoBuild"
-            ]
-        ),
-        .executable(
             name: "TravisIpcDemoBuild",
             targets: [
                 "TravisIpcDemoBuild"
@@ -68,8 +74,9 @@ let package = Package(
     ],
     dependencies: [
         .package(
+            name: "EmceeTestRunner",
             url: "https://github.com/avito-tech/Emcee", 
-            .revision("a8fc4e1e2fe070ee853af7b0e188a0d2274cd614")
+            .revision("cebbcef73857340d8b1156386afdeb4ddb1dde94")
         ),
         .package(
             url: "https://github.com/AliSoftware/Dip",
@@ -118,13 +125,13 @@ let package = Package(
                 "Destinations",
                 "Dip",
                 "Emcee",
-                "EmceeInterfaces",
                 "Git",
                 "RemoteFiles",
                 "Simctl",
                 "SingletonHell",
                 "Tasks",
                 "Xcodebuild",
+                .product(name: "EmceeInterfaces", package: "EmceeTestRunner"),
             ]
         ),
         .target(
@@ -147,7 +154,6 @@ let package = Package(
                 "CiFoundation",
                 "Destinations",
                 "Emcee",
-                "EmceeInterfaces",
                 "RemoteFiles",
                 "SingletonHell",
                 "Tasks",
@@ -163,6 +169,23 @@ let package = Package(
                 "Git",
                 "SingletonHell",
                 "Tasks",
+            ]
+        ),
+        .target(
+            name: "TeamcityUiTestsDemoBuild",
+            dependencies: [
+                "BuildDsl",
+                "CheckDemoTask",
+            ]
+        ),
+        .target(
+            name: "TeamcityReleaseToCocoapodsBuild",
+            dependencies: [
+                "BuildDsl",
+                "CiFoundation",
+                "Destinations",
+                "ReleaseToCocoapodsTask",
+                "SingletonHell",
             ]
         ),
         .target(
@@ -182,6 +205,7 @@ let package = Package(
             dependencies: [
                 "Bash",
                 "CiFoundation",
+                "Cocoapods",
                 "Di",
                 "Git",
                 "RemoteFiles",
@@ -239,6 +263,19 @@ let package = Package(
             ]
         ),
         .target(
+            name: "ReleaseToCocoapodsTask",
+            dependencies: [
+                "Bash",
+                "Bundler",
+                "CiFoundation",
+                "Destinations",
+                "Emcee",
+                "SingletonHell",
+                "Tasks",
+                "Xcodebuild",
+            ]
+        ),
+        .target(
             name: "TravisOversimplifiedDemoBuild",
             dependencies: [
                 "BuildDsl",
@@ -262,7 +299,6 @@ let package = Package(
                 "CiFoundation",
                 "Destinations",
                 "Emcee",
-                "EmceeInterfaces",
                 "RemoteFiles",
                 "SingletonHell",
                 "Tasks",
@@ -295,9 +331,9 @@ let package = Package(
                 "Brew",
                 "CiFoundation",
                 "Destinations",
-                "EmceeInterfaces",
                 "RemoteFiles",
                 "SingletonHell",
+                .product(name: "EmceeInterfaces", package: "EmceeTestRunner"),
             ]
         ),
         .target(
@@ -314,12 +350,14 @@ let package = Package(
             dependencies: [
                 "Bash",
                 "Bundler",
+                "CiFoundation",
             ]
         ),
         .target(
             name: "Bundler",
             dependencies: [
                 "Bash",
+                "CiFoundation",
                 "Git",
             ]
         ),
@@ -335,13 +373,6 @@ let package = Package(
             name: "Git",
             dependencies: [
                 "CiFoundation",
-            ]
-        ),
-        .target(
-            name: "TeamcityOversimplifiedDemoBuild",
-            dependencies: [
-                "BuildDsl",
-                "CheckDemoTask",
             ]
         ),
         .target(
@@ -367,6 +398,6 @@ let package = Package(
         ),
     ],
     swiftLanguageVersions: [
-        .v4_2
+        .v5
     ]
 )

@@ -24,8 +24,8 @@ public final class SnapshotForInteractionResolverImpl: SnapshotForInteractionRes
     }
     
     public func resolve(
-        overridenPercentageOfVisibleArea: CGFloat?,
-        completion: @escaping (ElementSnapshot) -> (InteractionResult))
+        arguments: SnapshotForInteractionResolverArguments,
+        completion: @escaping (SnapshotForInteractionResolverResult) -> (InteractionResult))
         throws
         -> InteractionResult
     {
@@ -34,7 +34,8 @@ public final class SnapshotForInteractionResolverImpl: SnapshotForInteractionRes
         )
         
         return performerOfSpecificImplementationOfInteractionForVisibleElement.performInteractionForVisibleElement(
-            overridenPercentageOfVisibleArea: overridenPercentageOfVisibleArea,
+            overridenPercentageOfVisibleArea: arguments.overridenPercentageOfVisibleArea,
+            interactionCoordinates: arguments.interactionCoordinates,
             resolvedElementQuery: resolvedElementQuery,
             interactionSpecificImplementation: InteractionSpecificImplementation {
                 completion($0)

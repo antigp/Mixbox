@@ -2,6 +2,8 @@
 import Foundation
 import UIKit
 
+import UIKit
+
 // Points are in coordinate space of window.
 public final class DraggingInstruction: Codable, Equatable {
     // Point of initial touch

@@ -62,11 +62,13 @@ public class GrayBoxLegacyNetworkStubbingBridgedUrlProtocolInstance: BridgedUrlP
                 let path = try bundleResourcePathProvider.path(resource: string)
                 return try Data(contentsOf: URL(fileURLWithPath: path))
             } catch {
-                testFailureRecorder.recordFailure(
-                    description: "Failed to load file \(string) from \(bundleResourcePathProvider)`: \(error)",
-                    fileLine: .current(),
-                    shouldContinueTest: false
-                )
+                DispatchQueue.main.async { [testFailureRecorder] in
+                    testFailureRecorder.recordFailure(
+                        description: "Failed to load file \(string) from \(bundleResourcePathProvider)`: \(error)",
+                        fileLine: .current(),
+                        shouldContinueTest: false
+                    )
+                }
                 throw error
             }
         }

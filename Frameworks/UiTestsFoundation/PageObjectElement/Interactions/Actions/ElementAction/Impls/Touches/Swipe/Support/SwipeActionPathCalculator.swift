@@ -1,5 +1,6 @@
 import MixboxUiKit
 import Foundation
+import MixboxIpcCommon
 import UIKit
 
 public final class SwipeActionPathCalculator {
@@ -13,13 +14,10 @@ public final class SwipeActionPathCalculator {
     }
     
     public func path(
-        elementSnapshot: ElementSnapshot)
+        elementSnapshot: ElementSnapshot,
+        startPoint: CGPoint)
         -> SwipeActionPath
     {
-        let startPoint = self.startPoint(
-            elementSnapshot: elementSnapshot
-        )
-        
         let endPoint = self.endPoint(
             elementSnapshot: elementSnapshot,
             startPoint: startPoint
@@ -34,24 +32,6 @@ public final class SwipeActionPathCalculator {
             startPoint: startPoint,
             endPoint: endPoint,
             velocity: Double(velocity)
-        )
-    }
-    
-    private func startPoint(
-        elementSnapshot: ElementSnapshot)
-        -> CGPoint
-    {
-        let resolvedInteractionCoordinates: InteractionCoordinates
-        
-        switch swipeActionPathSettings.startPoint {
-        case .center:
-            resolvedInteractionCoordinates = InteractionCoordinates.center
-        case .interactionCoordinates(let interactionCoordinates):
-            resolvedInteractionCoordinates = interactionCoordinates
-        }
-        
-        return resolvedInteractionCoordinates.interactionCoordinatesOnScreen(
-            elementSnapshot: elementSnapshot
         )
     }
     

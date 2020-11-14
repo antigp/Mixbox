@@ -1,3 +1,5 @@
+import Foundation
+
 // Not really a good abstraction. It duplicates SBTMonitoredNetworkRequest interface.
 import Foundation
 import UIKit
