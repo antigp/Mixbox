@@ -1,6 +1,7 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 
 import UIKit
+import MixboxTestability_objc
 
 // Same as `BaseTestabilityElement`, but it also allows to mutate properties to
 // inject return values of functions of `TestabilityElement`.

@@ -5,6 +5,7 @@ import MixboxInAppServices
 import MixboxFoundation
 import MixboxIpcCommon
 import MixboxIpc
+import UIKit
 
 public final class GrayBoxDependencies: DependencyCollectionRegisterer {
     public init() {

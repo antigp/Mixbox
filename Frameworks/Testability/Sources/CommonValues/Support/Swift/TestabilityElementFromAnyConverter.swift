@@ -2,6 +2,7 @@
 
 import Foundation
 import CommonCrypto
+import MixboxTestability_objc
 
 public final class TestabilityElementFromAnyConverter {
     private init() {

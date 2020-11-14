@@ -1,4 +1,5 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
+import UIKit
 
 public final class UnsafeArray<T> {
     public let pointer: UnsafeMutablePointer<T>

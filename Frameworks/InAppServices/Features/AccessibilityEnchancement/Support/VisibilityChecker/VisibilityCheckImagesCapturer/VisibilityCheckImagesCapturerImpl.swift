@@ -2,6 +2,7 @@
 
 import MixboxFoundation
 import MixboxUiKit
+import UIKit
 
 // TODO: Split this class.
 public final class VisibilityCheckImagesCapturerImpl: VisibilityCheckImagesCapturer {

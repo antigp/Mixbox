@@ -64,7 +64,7 @@ public class GrayBoxLegacyNetworkStubbingBridgedUrlProtocolInstance: BridgedUrlP
             } catch {
                 DispatchQueue.main.async { [testFailureRecorder] in
                     testFailureRecorder.recordFailure(
-                        description: "Failed to load file \(string) from \(bundleResourcePathProvider)`: \(error)",
+                        description: "Failed to load file \(string) from \(self.bundleResourcePathProvider)`: \(error)",
                         fileLine: .current(),
                         shouldContinueTest: false
                     )

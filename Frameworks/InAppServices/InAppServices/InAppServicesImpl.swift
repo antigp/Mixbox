@@ -4,7 +4,6 @@ import MixboxIpc
 import MixboxIpcCommon
 import MixboxFoundation
 import MixboxDi
-import MixboxBuiltinDi
 
 public final class InAppServicesImpl: InAppServices {
     // Dependencies

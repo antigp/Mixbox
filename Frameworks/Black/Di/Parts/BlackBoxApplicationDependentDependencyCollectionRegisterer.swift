@@ -1,5 +1,6 @@
 import MixboxDi
 import MixboxUiTestsFoundation
+import XCTest
 
 public final class BlackBoxApplicationDependentDependencyCollectionRegisterer: DependencyCollectionRegisterer {
     public init() {

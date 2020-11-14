@@ -1,4 +1,5 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
+import UIKit
 
 // Multicasts `UiEventObserver` events
 public final class UiEventObservableImpl: UiEventObservable, UiEventObserver {

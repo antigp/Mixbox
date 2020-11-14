@@ -2,6 +2,7 @@
 // Logic of getting specific field can also be reused (e.g. as in DynamicLookupGenerator).
 //
 import Foundation
+import MixboxGenerators
 
 @dynamicMemberLookup
 public final class Fields<T> {

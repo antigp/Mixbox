@@ -2,7 +2,11 @@
 
 #import "Xcode_12_0_XCTest_CDStructures.h"
 #import "Xcode_12_0_MXMInstrumental.h"
+#if SWIFT_PACKAGE
+#import "../../../Manual/XCTest/SharedHeader/Xcode_12_0_SharedHeader.h"
+#else
 #import "Xcode_12_0_SharedHeader.h"
+#endif
 #import <Foundation/Foundation.h>
 
 @protocol XCTMetric;

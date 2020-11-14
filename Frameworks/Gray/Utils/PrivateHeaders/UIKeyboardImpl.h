@@ -7,6 +7,7 @@
 #import <UIKit/UIView.h>
 
 @class NSDictionary, NSMutableArray, NSMutableDictionary, NSString, TIKeyboardCandidateResultSet, TIKeyboardInputManagerState, TIKeyboardInputManagerStub, TIKeyboardLayout, TIKeyboardState, TIKeyboardTouchEvent, TISmartPunctuationController, UIAlertView, UIAutocorrectInlinePrompt, UIDelayedAction, UIKeyboardAutocorrectionController, UIKeyboardLayout, UIKeyboardScheduledTask, UIKeyboardTaskQueue, UILexicon, UIPhysicalKeyboardEvent, UITextInputArrowKeyHistory, UITextInputTraits, UITextSelectionView, _UIActionWhenIdle, _UIKeyboardFeedbackGenerator, _UIKeyboardTextSelectionController;
+@import UIKit;
 
 typedef void (^CDUnknownBlockType)(void);
 

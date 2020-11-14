@@ -1,4 +1,5 @@
 import Foundation
+import MixboxTestability_objc
 
 private var testability_customValues_associatedObjectKey = 0
 

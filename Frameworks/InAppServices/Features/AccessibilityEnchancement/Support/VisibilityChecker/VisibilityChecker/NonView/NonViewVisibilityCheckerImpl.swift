@@ -2,6 +2,8 @@
 
 import MixboxTestability
 import MixboxUiKit
+import UIKit
+import MixboxTestability_objc
 
 public final class NonViewVisibilityCheckerImpl: NonViewVisibilityChecker {
     private let screen: UIScreen

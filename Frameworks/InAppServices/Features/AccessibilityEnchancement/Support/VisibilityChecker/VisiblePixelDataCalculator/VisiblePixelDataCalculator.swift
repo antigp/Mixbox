@@ -1,4 +1,5 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
+import UIKit
 
 public protocol VisiblePixelDataCalculator {
     // Calculates the number of pixel in `afterImage` that have different pixel intensity than in `beforeImage`.

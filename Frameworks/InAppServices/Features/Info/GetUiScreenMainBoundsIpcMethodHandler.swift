@@ -2,6 +2,7 @@
 
 import MixboxIpc
 import MixboxIpcCommon
+import UIKit
 
 final class GetUiScreenMainBoundsIpcMethodHandler: IpcMethodHandler {
     let method = GetUiScreenMainBoundsIpcMethod()

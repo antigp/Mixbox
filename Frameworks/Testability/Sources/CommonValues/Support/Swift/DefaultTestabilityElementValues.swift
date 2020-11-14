@@ -1,6 +1,7 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 
 import UIKit
+import MixboxTestability_objc
 
 // Default return values for `TestabilityElement`, can be used in various implementations.
 public final class DefaultTestabilityElementValues {

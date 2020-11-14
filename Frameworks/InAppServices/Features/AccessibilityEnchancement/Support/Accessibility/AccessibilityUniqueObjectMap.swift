@@ -3,6 +3,7 @@
 import Foundation
 import MixboxFoundation
 import MixboxTestability
+import MixboxTestability_objc
 
 final class AccessibilityUniqueObjectMap {
     static let shared = AccessibilityUniqueObjectMap()

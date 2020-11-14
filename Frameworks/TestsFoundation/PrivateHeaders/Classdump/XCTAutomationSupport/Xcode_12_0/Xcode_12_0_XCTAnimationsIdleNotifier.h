@@ -1,7 +1,11 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000 && __IPHONE_OS_VERSION_MAX_ALLOWED < 150000
 
 #import "Xcode_12_0_XCTAutomationSupport_CDStructures.h"
+#if SWIFT_PACKAGE
+#import "../../../Manual/XCTest/SharedHeader/Xcode_12_0_SharedHeader.h"
+#else
 #import "Xcode_12_0_SharedHeader.h"
+#endif
 #import "Xcode_12_0_XCTCapabilitiesProviding.h"
 #import <Foundation/Foundation.h>
 

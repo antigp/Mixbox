@@ -3,15 +3,29 @@
 import PackageDescription
 import Foundation
 func cSettings() -> [CSetting] {
+    #if compiler(>=5.3)
     return [.define("MIXBOX_ENABLE_IN_APP_SERVICES", to: "1", .when(platforms: nil, configuration: .debug)),
             .define("SWIFT_PACKAGE"),
-            .define("__IPHONE_OS_VERSION_MAX_ALLOWED", to: "135000", .when(platforms: nil, configuration: .debug))]
+            .define("__IPHONE_OS_VERSION_MAX_ALLOWED", to: "140000", .when(platforms: nil, configuration: .debug))]
+    #else
+    return [.define("MIXBOX_ENABLE_IN_APP_SERVICES", to: "1", .when(platforms: nil, configuration: .debug)),
+            .define("SWIFT_PACKAGE"),
+            .define("__IPHONE_OS_VERSION_MAX_ALLOWED", to: "130000", .when(platforms: nil, configuration: .debug))]
+    #endif
 }
+
 func cxxSettings() -> [CXXSetting] {
+    #if compiler(>=5.3)
     return [.define("MIXBOX_ENABLE_IN_APP_SERVICES", to: "1", .when(platforms: nil, configuration: .debug)),
             .define("SWIFT_PACKAGE"),
-            .define("__IPHONE_OS_VERSION_MAX_ALLOWED", to: "135000", .when(platforms: nil, configuration: .debug))]
+            .define("__IPHONE_OS_VERSION_MAX_ALLOWED", to: "140000", .when(platforms: nil, configuration: .debug))]
+    #else
+    return [.define("MIXBOX_ENABLE_IN_APP_SERVICES", to: "1", .when(platforms: nil, configuration: .debug)),
+            .define("SWIFT_PACKAGE"),
+            .define("__IPHONE_OS_VERSION_MAX_ALLOWED", to: "130000", .when(platforms: nil, configuration: .debug))]
+    #endif
 }
+
 func swiftSettings() -> [SwiftSetting] {
     return [.define("MIXBOX_ENABLE_IN_APP_SERVICES", .when(platforms: nil, configuration: .debug)),
             .define("SWIFT_PACKAGE")]
@@ -34,7 +48,6 @@ let package = Package(
         .library(name: "MixboxGenerators", type: .static, targets: ["MixboxGenerators"]),
         .library(name: "MixboxGray", type: .static, targets: ["MixboxGray"]),
         .library(name: "MixboxInAppServices", type: .static, targets: ["MixboxInAppServices", "MixboxInAppServices_objc"]),
-        .library(name: "MixboxIoKit_objc", type: .static, targets: ["MixboxIoKit_objc"]),
         .library(name: "MixboxIoKit", type: .static, targets: ["MixboxIoKit_objc", "MixboxIoKit"]),
         .library(name: "MixboxIpc", type: .static, targets: ["MixboxIpc"]),
         .library(name: "MixboxIpcCommon", type: .static, targets: ["MixboxIpcCommon"]),
@@ -196,6 +209,7 @@ let package = Package(
         .target(name: "MixboxInAppServices_objc",
                 dependencies: [
                     .target(name: "MixboxIpcCommon"),
+                    .target(name: "MixboxTestability"),
                     .target(name: "MixboxIpcSbtuiHost"),
                     .target(name: "MixboxBuiltinIpc"),
                     .target(name: "MixboxIoKit"),
@@ -216,6 +230,7 @@ let package = Package(
         .target(name: "MixboxInAppServices",
                 dependencies: [
                     .target(name: "MixboxIpcCommon"),
+                    .target(name: "MixboxTestability"),
                     .target(name: "MixboxIpcSbtuiHost"),
                     .target(name: "MixboxBuiltinIpc"),
                     .target(name: "MixboxIoKit"),
@@ -226,12 +241,11 @@ let package = Package(
                 path: "Frameworks/InAppServices",
                 exclude: [
                     "Support/IPC/IpcStarter/Graybox/PrivateApi/",
-                    "Features/AccessibilityEnchancement/Support/VisibilityChecker/"
+                    "Features/AccessibilityEnchancement/Support/VisibilityChecker/WindowProvider.m"
                 ],
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
                 swiftSettings: swiftSettings()),
-                
         // MARK: - MixboxIoKit
         .target(name: "MixboxIoKit_objc",
                 dependencies: [
@@ -327,8 +341,7 @@ let package = Package(
                 dependencies: [
                     .target(name: "MixboxTestability_objc"),
                     .target(name: "MixboxFoundation"),
-                    .target(name: "MixboxUiKit"),
-                    .target(name: "MixboxInAppServices")
+                    .target(name: "MixboxUiKit")
                 ],
                 path: "Frameworks/Testability",
                 exclude: [

@@ -1,4 +1,5 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
+import UIKit
 
 public protocol VisibilityCheckImagesCapturer {
     // Captures the visibility check's before and after image for the given `view` and loads the pixel

@@ -1,6 +1,7 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 
 import UIKit
+import MixboxTestability_objc
 
 // For subclassing in Swift code. This class takes care of:
 // - Defining all function (with default return values).

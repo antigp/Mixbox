@@ -1,6 +1,7 @@
 import MixboxIpcCommon
 import Foundation
 import UIKit
+import MixboxUiKit
 
 public protocol Scroller: class {
     func scrollIfNeeded(

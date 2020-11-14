@@ -2,6 +2,7 @@
 
 import MixboxUiKit
 import MixboxFoundation
+import UIKit
 
 public final class VisiblePixelDataCalculatorImpl: VisiblePixelDataCalculator {
     private let imagePixelDataFromImageCreator: ImagePixelDataFromImageCreator

@@ -1,4 +1,5 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
+import UIKit
 
 // Translated from Objective-C to Swift. Code is from EarlGrey.
 // https://github.com/google/EarlGrey/blob/87ffa7ac2517cc8931e4e6ba11714961cbac6dd7/EarlGrey/Common/GREYScreenshotUtil.m

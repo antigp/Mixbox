@@ -2,6 +2,7 @@
 
 import UIKit
 import CommonCrypto
+import MixboxTestability_objc
 
 // For use in NSObject+TestabilityElement.m
 //

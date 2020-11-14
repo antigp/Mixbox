@@ -1,7 +1,15 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000 && __IPHONE_OS_VERSION_MAX_ALLOWED < 150000
 
 #import "Xcode_12_0_XCTest_CDStructures.h"
+#if SWIFT_PACKAGE
+#import "../../../Manual/XCTest/SharedHeader/Xcode_12_0_SharedHeader.h"
+#else
+#if SWIFT_PACKAGE
+#import "../../../Manual/XCTest/SharedHeader/Xcode_12_0_SharedHeader.h"
+#else
 #import "Xcode_12_0_SharedHeader.h"
+#endif
+#endif
 #import <XCTest/XCTestObservation.h>
 
 @class XCActivityRecord, XCTContext;

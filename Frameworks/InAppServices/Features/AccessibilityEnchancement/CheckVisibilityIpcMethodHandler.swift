@@ -3,7 +3,8 @@
 import MixboxIpc
 import MixboxIpcCommon
 import MixboxFoundation
-import MixboxTestability
+import MixboxTestability_objc
+import UIKit
 
 final class CheckVisibilityIpcMethodHandler: IpcMethodHandler {
     let method = CheckVisibilityIpcMethod()

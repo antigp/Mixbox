@@ -1,4 +1,5 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
+import UIKit
 
 public final class PageObjectElementGenerationWizardView: UIView {
     public var selectedRect: CGRect? {

@@ -1,6 +1,7 @@
 #if MIXBOX_ENABLE_IN_APP_SERVICES
 
 import UIKit
+import MixboxTestability_objc
 
 // "Data Transfer Object", a variation of `TestabilityElement` that can
 // be created from fields and doesn't have any behavior.

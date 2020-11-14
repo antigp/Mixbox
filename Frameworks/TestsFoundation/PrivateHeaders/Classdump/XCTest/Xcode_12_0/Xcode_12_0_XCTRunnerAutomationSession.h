@@ -1,8 +1,14 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000 && __IPHONE_OS_VERSION_MAX_ALLOWED < 150000
 
 #import "Xcode_12_0_XCTest_CDStructures.h"
+#if SWIFT_PACKAGE
+#import "../../../Manual/XCTest/SharedHeader/Xcode_12_0_SharedHeader.h"
+#import "../../XCTAutomationSupport/Xcode_12_0/Xcode_12_0_XCTElementSnapshotAttributeDataSource.h"
+#else
 #import "Xcode_12_0_SharedHeader.h"
 #import "Xcode_12_0_XCTElementSnapshotAttributeDataSource.h"
+#endif
+
 
 @class XCTCapabilities, XCTElementQuery, XCTElementQueryResults;
 
@@ -27,7 +33,11 @@
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000 && __IPHONE_OS_VERSION_MAX_ALLOWED < 150000
 
 #import "Xcode_12_0_XCTest_CDStructures.h"
+#if SWIFT_PACKAGE
+#import "../../../Manual/XCTest/SharedHeader/Xcode_12_0_SharedHeader.h"
+#else
 #import "Xcode_12_0_SharedHeader.h"
+#endif
 #import "Xcode_12_0_XCTRunnerAutomationSession.h"
 #import <Foundation/Foundation.h>
 
