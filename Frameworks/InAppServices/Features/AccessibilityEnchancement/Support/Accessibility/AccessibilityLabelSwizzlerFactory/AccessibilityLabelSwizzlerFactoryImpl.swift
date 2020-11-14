@@ -35,7 +35,7 @@ public class AccessibilityLabelSwizzlerFactoryImpl: AccessibilityLabelSwizzlerFa
                 objcRuntimeObjcMethodsWithUniqueImplementationProvider: objcRuntimeObjcMethodsWithUniqueImplementationProvider,
                 predefinedObjcMethodsWithUniqueImplementationProvider: predefinedObjcMethodsWithUniqueImplementationProvider
             )
-        case 11, 12, 13:
+        case 11, 12, 13, 14:
             return ios11OrHigherAccessibilityLabelSwizzler(
                 accessibilityLabelFunctionReplacement: accessibilityLabelFunctionReplacement,
                 objcRuntimeObjcMethodsWithUniqueImplementationProvider: objcRuntimeObjcMethodsWithUniqueImplementationProvider,

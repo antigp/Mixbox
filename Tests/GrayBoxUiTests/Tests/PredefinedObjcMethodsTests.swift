@@ -48,7 +48,7 @@ final class PredefinedObjcMethodsTests: TestCase {
             switch iosVersion {
             case 10:
                 checkForIos10()
-            case 11, 12, 13:
+            case 11, 12, 13, 14:
                 checkForIosFrom11To13()
             default:
                 XCTFail("Current iOS version is not supported in this test: \(iosVersion). Please test it carefully.")
