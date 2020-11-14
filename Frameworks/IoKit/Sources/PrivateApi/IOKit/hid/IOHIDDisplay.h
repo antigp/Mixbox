@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <CoreFoundation/CoreFoundation.h>
 #if SWIFT_PACKAGE
+#include "../IOKitLib.h"
 #else
 #include "IOKitLib.h"
 #endif
