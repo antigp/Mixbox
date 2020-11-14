@@ -70,7 +70,11 @@ let package = Package(
         .binaryTarget(
             name: "XCTAutomationSupport",
             path: "artifacts/XCTAutomationSupport.xcframework"
-        ),     
+        ),
+        .binaryTarget(
+            name: "XCTest",
+            path: "artifacts/XCTest.xcframework"
+        ),
         // MARK: - MixboxAnyCodable
         .target(
             name: "MixboxAnyCodable",
@@ -86,30 +90,29 @@ let package = Package(
                 dependencies: [
                     .target(name: "MixboxUiTestsFoundation"),
                     .target(name: "MixboxIpcSbtuiClient"),
-                    .target(name: "MixboxDi")
+                    .target(name: "MixboxDi"),
+                    .target(name: "XCTest")
                 ],
                 path: "Frameworks/Black",
                 sources: ["Utils/ActionDependencies/EventGenerator/XcuiEventGeneratorObjC"],
                 publicHeadersPath: ".",
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
-                swiftSettings: swiftSettings(),
-                linkerSettings: [.linkedFramework("XCTest")]),
+                swiftSettings: swiftSettings()),
         .target(name: "MixboxBlack",
                 dependencies: [
                     .target(name: "MixboxUiTestsFoundation"),
                     .target(name: "MixboxIpcSbtuiClient"),
                     .target(name: "MixboxDi"),
                     .target(name: "MixboxBlack_objc"),
-                    .target(name: "XCTAutomationSupport")
+                    .target(name: "XCTAutomationSupport"),
+                    .target(name: "XCTest")
                 ],
                 path: "Frameworks/Black",
                 exclude: ["Utils/ActionDependencies/EventGenerator/XcuiEventGeneratorObjC"],
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
-                swiftSettings: swiftSettings(),
-                linkerSettings: [.linkedFramework("XCTest"),.linkedLibrary("swiftXCTest"), .linkedFramework("XCTAutomationSupport")]),
-        
+                swiftSettings: swiftSettings()),        
         // MARK: - MixboxBuiltinIpc
         .target(name: "MixboxBuiltinIpc_objc", dependencies: [
                     .target(name: "MixboxIpc"),
