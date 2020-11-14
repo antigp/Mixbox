@@ -40,12 +40,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <CoreFoundation/CoreFoundation.h>
 #if SWIFT_PACKAGE
 #include "../IOKitLib.h"
+#include "../hid/IOHIDNotification.h"
 #else
 #include "IOKitLib.h"
+#include "IOHIDNotification.h"
 #endif
 
 #include "IOHIDEvent.h"
-#include "IOHIDNotification.h"
+
 
 __BEGIN_DECLS
 			
@@ -112,9 +114,9 @@ __BEGIN_DECLS
 	
 	void _IOHIDServiceScheduleWithRunLoop(IOHIDServiceRef service, CFRunLoopRef runloop, CFStringRef mode);
 	void _IOHIDServiceUnscheduleWithRunLoop(IOHIDServiceRef service);
-	
-	IOHIDNotificationRef IOHIDServiceCreateRemovalNotification(IOHIDServiceRef display, IOHIDNotificationCallback callback, void* target, void* refcon);
-	
+//	
+//	IOHIDNotificationRef IOHIDServiceCreateRemovalNotification(IOHIDServiceRef display, IOHIDNotificationCallback callback, void* target, void* refcon);
+//	
 	Boolean _IOHIDServiceOpen(IOHIDServiceRef service, CFTypeRef client, IOOptionBits options);
 	Boolean _IOHIDServiceClose(IOHIDServiceRef service, CFTypeRef client, IOOptionBits options);
 	

@@ -70,8 +70,8 @@ __BEGIN_DECLS
 	CFTypeID IOHIDEventSystemGetTypeID(void);
 	IOHIDEventSystemRef IOHIDEventSystemCreate(CFAllocatorRef allocator);
 	
-	CFArrayRef IOHIDEventSystemCopyMatchingServices(IOHIDEventSystemRef system, CFDictionaryRef propertyTable,
-													IOHIDNotificationCallback matchCallback, void* matchTarget, void* matchRefcon, IOHIDNotificationRef* matchNotif);
+//	CFArrayRef IOHIDEventSystemCopyMatchingServices(IOHIDEventSystemRef system, CFDictionaryRef propertyTable,
+//													IOHIDNotificationCallback matchCallback, void* matchTarget, void* matchRefcon, IOHIDNotificationRef* matchNotif);
 	void IOHIDEventSystemRegisterQueue(IOHIDEventSystemRef system, IOHIDEventQueueRef queue);
 	void IOHIDEventSystemUnregisterQueue(IOHIDEventSystemRef system, IOHIDEventQueueRef queue);
 	

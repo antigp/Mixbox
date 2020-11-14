@@ -108,7 +108,7 @@ __BEGIN_DECLS
 	void _IOHIDDisplayUnscheduleWithRunLoop(IOHIDDisplayRef display, CFRunLoopRef runloop, CFStringRef mode);
 	void _IOHIDDisplayScheduleWithRunLoop(IOHIDDisplayRef display, CFRunLoopRef runloop, CFStringRef mode);
 	
-	IOHIDNotificationRef IOHIDDisplayCreateRemovalNotification(IOHIDDisplayRef display, IOHIDNotificationCallback callback, void* target, void* refcon);
+//	IOHIDNotificationRef IOHIDDisplayCreateRemovalNotification(IOHIDDisplayRef display, IOHIDNotificationCallback callback, void* target, void* refcon);
 	
 	Boolean _IOHIDDisplayOpen(IOHIDDisplayRef display, CFTypeRef client);
 	void _IOHIDDisplayClose(IOHIDDisplayRef display, CFTypeRef client);

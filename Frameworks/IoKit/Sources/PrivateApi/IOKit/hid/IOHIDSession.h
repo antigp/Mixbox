@@ -119,7 +119,7 @@ __BEGIN_DECLS
 #pragma mark -
 #pragma mark Actions
 	
-	Boolean IOHIDSessionOpen(IOHIDSessionRef session, CFTypeRef client, IOHIDSessionCallback callback, void* refcon)
+Boolean IOHIDSessionOpen(IOHIDSessionRef session, CFTypeRef client, IOHIDSessionCallback callback, void* refcon);
 	void IOHIDSessionClose(IOHIDSessionRef session, CFTypeRef client);
 	
 	void IOHIDSessionAddService(IOHIDSessionRef, IOHIDServiceRef service);
