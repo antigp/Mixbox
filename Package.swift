@@ -45,7 +45,7 @@ let package = Package(
         .library(name: "MixboxDi", type: .static, targets: ["MixboxDi"]),
         .library(name: "MixboxBuiltinDi", type: .static, targets: ["MixboxBuiltinDi"]),
         .library(name: "MixboxFakeSettingsAppMain", type: .static, targets: ["MixboxFakeSettingsAppMain"]),
-        .library(name: "MixboxFoundation", type: .static, targets: ["MixboxFoundation"]),
+        .library(name: "MixboxFoundation", type: .static, targets: ["MixboxFoundation_objc","MixboxFoundation"]),
         .library(name: "MixboxGenerators", type: .static, targets: ["MixboxGenerators"]),
         .library(name: "MixboxGray", type: .static, targets: ["MixboxGray"]),
         .library(name: "MixboxInAppServices", type: .static, targets: ["MixboxInAppServices", "MixboxInAppServices_objc"]),
