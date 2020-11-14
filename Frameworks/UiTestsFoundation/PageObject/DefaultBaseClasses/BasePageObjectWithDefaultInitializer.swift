@@ -1,6 +1,3 @@
-import MixboxUiTestsFoundation
-import MixboxFoundation
-
 open class BasePageObjectWithDefaultInitializer:
     BasePageObject,
     PageObjectWithDefaultInitializer

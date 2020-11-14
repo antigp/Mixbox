@@ -2,32 +2,33 @@ import UIKit
 import MixboxInAppServices
 import MixboxIpc
 import MixboxIpcCommon
+import MixboxDi
+import MixboxBuiltinDi
+import TestsIpc
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: TouchDrawingWindow?
+    var window: UiEventObservingWindow?
+    
+    #if DEBUG
     
     // These properties are accessed from tests:
-    var ipcClient: IpcClient?
-    var ipcRouter: IpcRouter?
-    let keyboardEventInjector: KeyboardEventInjector?
-    let mixboxInAppServices: MixboxInAppServices?
+    
+    let inAppServicesDependencyInjection = BuiltinDependencyInjection()
+    let inAppServices: InAppServices
+    var startedInAppServices: StartedInAppServices?
+    
+    #endif
     
     override init() {
-        let factoryOrNil = InAppServicesDependenciesFactoryImpl(
-            environment: ProcessInfo.processInfo.environment
+        #if DEBUG
+        
+        inAppServices = InAppServicesImpl(
+            dependencyInjection: inAppServicesDependencyInjection,
+            dependencyCollectionRegisterer: InAppServicesDependencyCollectionRegisterer()
         )
         
-        if let factory = factoryOrNil {
-            mixboxInAppServices = MixboxInAppServices(
-                inAppServicesDependenciesFactory: factory
-            )
-            
-            keyboardEventInjector = factory.keyboardEventInjector
-        } else {
-            mixboxInAppServices = nil
-            keyboardEventInjector = nil
-        }
+        #endif
         
         super.init()
     }
@@ -37,12 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
         -> Bool
     {
-        
-        let uiEventHistoryTracker = UiEventHistoryTracker()
-        
-        let window = TouchDrawingWindow(
-            frame: UIScreen.main.bounds,
-            uiEventObserver: uiEventHistoryTracker
+        let window = UiEventObservingWindow(
+            frame: UIScreen.main.bounds
         )
         
         self.window = window
@@ -54,19 +51,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         #if DEBUG
         if ProcessInfo.processInfo.environment["MIXBOX_IPC_STARTER_TYPE"] != nil {
-            if let mixboxInAppServices = mixboxInAppServices {
-                let customIpcMethods = CustomIpcMethods(
-                    uiEventHistoryProvider: uiEventHistoryTracker,
-                    rootViewControllerManager: rootViewControllerManager
-                )
-                
-                // TODO: add environment to be able to disable registration of methods?
-                customIpcMethods.registerIn(mixboxInAppServices)
-                
-                // Yes, Swift is stupid sometimes:
-                let (router, client) = mixboxInAppServices.start()
-                (ipcRouter, ipcClient) = (router, client)
-            }
+            inAppServices.set(uiEventObservable: window)
+            
+            let customIpcMethods = CustomIpcMethods(
+                rootViewControllerManager: rootViewControllerManager
+            )
+            
+            // TODO: add environment to be able to disable registration of methods?
+            customIpcMethods.registerIn(inAppServices)
+            
+            startedInAppServices = inAppServices.start()
         }
         #endif
         

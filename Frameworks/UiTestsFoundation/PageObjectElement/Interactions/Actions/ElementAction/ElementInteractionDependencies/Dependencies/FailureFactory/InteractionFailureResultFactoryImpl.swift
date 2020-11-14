@@ -1,3 +1,5 @@
+import UIKit
+
 public final class InteractionFailureResultFactoryImpl: InteractionFailureResultFactory {
     private let applicationStateProvider: ApplicationStateProvider
     private let messagePrefix: String
@@ -24,11 +26,11 @@ public final class InteractionFailureResultFactoryImpl: InteractionFailureResult
     public func elementIsNotSufficientlyVisibleResult(
         percentageOfVisibleArea: CGFloat,
         minimalPercentageOfVisibleArea: CGFloat,
-        scrollingFailureMessage: String?)
+        potentialCauseOfFailure: String?)
         -> InteractionResult
     {
-        let suffix = scrollingFailureMessage.flatMap { message in
-            ", на это могла повлиять ошибка при скроллинге: \(message)"
+        let suffix = potentialCauseOfFailure.flatMap { message in
+            ", на это могла повлиять ошибка: \(message)"
         }
         
         return failureResult(

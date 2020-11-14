@@ -1,20 +1,21 @@
 import MixboxIpc
 import TestsIpc
 import MixboxInAppServices
+import UIKit
 
 final class SetScreenIpcMethodHandler: IpcMethodHandler {
     typealias Method = SetScreenIpcMethod
     
     let method = Method()
     
-    private weak var mixboxInAppServices: MixboxInAppServices?
+    private weak var ipcMethodHandlerWithDependenciesRegisterer: IpcMethodHandlerWithDependenciesRegisterer?
     private let rootViewControllerManager: RootViewControllerManager
     
     init(
-        mixboxInAppServices: MixboxInAppServices?,
+        ipcMethodHandlerWithDependenciesRegisterer: IpcMethodHandlerWithDependenciesRegisterer?,
         rootViewControllerManager: RootViewControllerManager)
     {
-        self.mixboxInAppServices = mixboxInAppServices
+        self.ipcMethodHandlerWithDependenciesRegisterer = ipcMethodHandlerWithDependenciesRegisterer
         self.rootViewControllerManager = rootViewControllerManager
     }
     
@@ -37,18 +38,9 @@ final class SetScreenIpcMethodHandler: IpcMethodHandler {
     }
     
     private func rootViewController(screen: SetScreenIpcMethod.Screen) -> UIViewController {
-        let navigationController = UINavigationController()
-        
-        let testingViewController = TestingViewController(
-            testingViewControllerSettings: TestingViewControllerSettings(
-                viewType: screen.viewType,
-                mixboxInAppServices: mixboxInAppServices,
-                navigationController: navigationController
-            )
+        return TestingViewFactory().rootViewController(
+            viewType: screen.viewType,
+            ipcMethodHandlerWithDependenciesRegisterer: ipcMethodHandlerWithDependenciesRegisterer
         )
-        
-        navigationController.setViewControllers([testingViewController], animated: false)
-        
-        return navigationController
     }
 }

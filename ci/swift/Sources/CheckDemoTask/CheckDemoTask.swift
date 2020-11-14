@@ -14,35 +14,54 @@ public final class CheckDemoTask: LocalTask {
     private let environmentProvider: EnvironmentProvider
     private let mixboxTestDestinationProvider: MixboxTestDestinationProvider
     private let bundlerCommandGenerator: BundlerCommandGenerator
+    private let bashEscapedCommandMaker: BashEscapedCommandMaker
     
     public init(
         bashExecutor: BashExecutor,
         iosProjectBuilder: IosProjectBuilder,
         environmentProvider: EnvironmentProvider,
         mixboxTestDestinationProvider: MixboxTestDestinationProvider,
-        bundlerCommandGenerator: BundlerCommandGenerator)
+        bundlerCommandGenerator: BundlerCommandGenerator,
+        bashEscapedCommandMaker: BashEscapedCommandMaker)
     {
         self.bashExecutor = bashExecutor
         self.iosProjectBuilder = iosProjectBuilder
         self.environmentProvider = environmentProvider
         self.mixboxTestDestinationProvider = mixboxTestDestinationProvider
         self.bundlerCommandGenerator = bundlerCommandGenerator
+        self.bashEscapedCommandMaker = bashEscapedCommandMaker
     }
     
     public func execute() throws {
         let reportsPath = try environmentProvider.getOrThrow(env: Env.MIXBOX_CI_REPORTS_PATH)
         
-        let xcodebuildPipeFilter = try bundlerCommandGenerator.bundlerCommand(
-            command:
-            """
-            xcpretty -r junit -o "\(reportsPath)/junit.xml"
-            """
+        let xcodebuildPipeFilter = bashEscapedCommandMaker.escapedCommand(
+            arguments: try bundlerCommandGenerator.bundle(
+                arguments: ["xcpretty", "-r", "junit", "-o", "\(reportsPath)/junit.xml"]
+            )
+        )
+        
+        _ = try iosProjectBuilder.build(
+            projectDirectoryFromRepoRoot: "Demos/UiTestsDemo",
+            action: .build,
+            scheme: "Demo",
+            workspaceName: "UiTestsDemo",
+            testDestination: try mixboxTestDestinationProvider.mixboxTestDestination(),
+            xcodebuildPipeFilter: "cat"
         )
         
         try iosProjectBuilder.test(
-            projectDirectoryFromRepoRoot: "Demos/OversimplifiedDemo",
-            scheme: "OversimplifiedDemo",
-            workspaceName: "OversimplifiedDemo",
+            projectDirectoryFromRepoRoot: "Demos/UiTestsDemo",
+            scheme: "BlackBoxTests",
+            workspaceName: "UiTestsDemo",
+            testDestination: try mixboxTestDestinationProvider.mixboxTestDestination(),
+            xcodebuildPipeFilter: xcodebuildPipeFilter
+        )
+        
+        try iosProjectBuilder.test(
+            projectDirectoryFromRepoRoot: "Demos/UiTestsDemo",
+            scheme: "GrayBoxTests",
+            workspaceName: "UiTestsDemo",
             testDestination: try mixboxTestDestinationProvider.mixboxTestDestination(),
             xcodebuildPipeFilter: xcodebuildPipeFilter
         )

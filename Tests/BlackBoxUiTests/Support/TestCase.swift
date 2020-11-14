@@ -5,7 +5,9 @@ import MixboxBlack
 import SBTUITestTunnel
 import MixboxIpcSbtuiClient
 import MixboxBuiltinIpc
+import MixboxBuiltinDi
 import MixboxIpc
+import MixboxIpcCommon
 import MixboxFoundation
 import TestsIpc
 
@@ -38,11 +40,12 @@ class TestCase: BaseUiTestCase, ScreenOpener {
         return dependencies.resolve()
     }
     
-    override func makeDependencies() -> TestCaseDependenciesResolver {
-        TestCaseDependenciesResolver(
-            registerer: BlackBoxTestCaseDependencies(
+    override func dependencyInjectionConfiguration() -> DependencyInjectionConfiguration {
+        DependencyInjectionConfiguration(
+            dependencyCollectionRegisterer: BlackBoxTestCaseDependencies(
                 bundleResourcePathProviderForTestsTarget: bundleResourcePathProviderForTestsTarget
-            )
+            ),
+            performanceLogger: Singletons.performanceLogger
         )
     }
     
@@ -70,6 +73,10 @@ class TestCase: BaseUiTestCase, ScreenOpener {
         
         lazilyInitializedIpcClient.ipcClient = launchedApplication.ipcClient
         ipcRouter = launchedApplication.ipcRouter
+        
+        synchronousIpcClient
+            .callOrFail(method: SetTouchDrawerEnabledIpcMethod(), arguments: true)
+            .getVoidReturnValueOrFail()
     }
     
     // For tests of IPC

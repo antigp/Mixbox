@@ -1,4 +1,5 @@
 import MixboxFoundation
+import UIKit
 
 public protocol ElementFactory: class {
     // These functions designed to be implemented by classes, not to be used in tests.
@@ -16,6 +17,7 @@ public protocol ElementFactory: class {
     func with(interactionMode: InteractionMode?) -> ElementFactory
     func with(interactionTimeout: TimeInterval?) -> ElementFactory
     func with(percentageOfVisibleArea: CGFloat?) -> ElementFactory
+    func with(pixelPerfectVisibilityCheck: Bool?) -> ElementFactory
 }
 
 // Convenient functions

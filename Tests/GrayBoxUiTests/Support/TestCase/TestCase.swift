@@ -2,8 +2,10 @@ import XCTest
 import MixboxTestsFoundation
 import MixboxUiTestsFoundation
 import MixboxIpc
+import MixboxIpcCommon
 import MixboxFoundation
 import MixboxGray
+import MixboxBuiltinDi
 import TestsIpc
 @testable import TestedApp
 
@@ -17,23 +19,33 @@ class TestCase: BaseUiTestCase, ScreenOpener {
         )
     }()
     
-    override func makeDependencies() -> TestCaseDependenciesResolver {
-        TestCaseDependenciesResolver(
-            registerer: GrayBoxTestCaseDependencies(
+    override func dependencyInjectionConfiguration() -> DependencyInjectionConfiguration {
+        DependencyInjectionConfiguration(
+            dependencyCollectionRegisterer: GrayBoxTestCaseDependencies(
                 bundleResourcePathProviderForTestsTarget: bundleResourcePathProviderForTestsTarget
-            )
+            ),
+            performanceLogger: Singletons.performanceLogger
         )
     }
     
     override func setUp() {
-        // TODO: Move to DI (when Dip will be used for DI).
+        // TODO: Move to DI.
         
         let appDelegate = self.appDelegate
         
-        lazilyInitializedIpcClient.ipcClient = appDelegate.ipcClient
+        lazilyInitializedIpcClient.ipcClient = appDelegate.startedInAppServices?.client.map { ipcClient in
+            PerformanceLoggingIpcClient(
+                ipcClient: ipcClient,
+                performanceLogger: Singletons.performanceLogger
+            )
+        }
         
         let ipcRouterHolder: IpcRouterHolder = dependencies.resolve()
-        ipcRouterHolder.ipcRouter = appDelegate.ipcRouter
+        ipcRouterHolder.ipcRouter = appDelegate.startedInAppServices?.router
+        
+        synchronousIpcClient
+            .callOrFail(method: SetTouchDrawerEnabledIpcMethod(), arguments: true)
+            .getVoidReturnValueOrFail()
         
         super.setUp()
     }

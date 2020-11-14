@@ -1,4 +1,5 @@
 import MixboxFoundation
+import UIKit
 
 public protocol ElementSnapshot: class, CustomDebugStringConvertible {
     // Common (can be retrieved via Apple's Accessibility feature):
@@ -60,7 +61,7 @@ extension ElementSnapshot {
         }
     }
     
-    // 1. Returns text (from testabilityValue_text).
+    // 1. Returns text (from mb_testability_text).
     // 2. If this is not possible, `fallback` argument is used, `fallback` can use `label` or `value`.
     //    Different views store text in different accessibility properties.
     //    For example, UITextView/UITextField store text in accessibilityValue.

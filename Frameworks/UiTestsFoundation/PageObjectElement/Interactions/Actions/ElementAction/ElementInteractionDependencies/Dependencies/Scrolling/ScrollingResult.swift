@@ -2,7 +2,8 @@ public final class ScrollingResult {
     public enum Status {
         case scrolled
         case elementWasLostAfterScroll
-        case alreadyVisible(percentageOfVisibleArea: CGFloat)
+        case alreadyVisible(ElementVisibilityCheckerResult)
+        case alreadyInHierarchyAndVisibilityCheckIsNotRequired
         case error(String)
     }
     

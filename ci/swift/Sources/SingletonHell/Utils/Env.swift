@@ -11,7 +11,6 @@ public enum Env: String {
     case MIXBOX_CI_XCODE_VERSION
     
     // Swift CI external envs, Emcee:
-    case MIXBOX_CI_EMCEE_FBXCTEST_URL
     case MIXBOX_CI_EMCEE_PATH
     case MIXBOX_CI_EMCEE_QUEUE_SERVER_RUN_CONFIGURATION_URL
     case MIXBOX_CI_EMCEE_SHARED_QUEUE_DEPLOYMENT_DESTINATIONS_URL
@@ -26,9 +25,12 @@ public enum Env: String {
     case MIXBOX_CI_RUN_ONLY_ONE_TEST
     
     // Swift CI internal envs (that are passed to tests):
-    case MIXBOX_CI_USES_FBXCTEST
+    case MIXBOX_CI_USES_FBXCTEST // todo: remove from Mixbox
     case MIXBOX_CI_IS_CI_BUILD
     case MIXBOX_IPC_STARTER_TYPE
+    case MIXBOX_CI_GRAPHITE_HOST
+    case MIXBOX_CI_GRAPHITE_PORT
+    case MIXBOX_CI_GRAPHITE_PREFIX
     
     // Cocoapods envs:
     case MIXBOX_PUSHSPEC_STYLE

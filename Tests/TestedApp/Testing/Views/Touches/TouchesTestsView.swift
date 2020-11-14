@@ -7,7 +7,7 @@ import TestsIpc
 // - All views should have fixed frames and other properties that affect coordinates
 // - There should be a view with "targetView" accessibilityIdentifier
 // - "targetView" should be on screen of every supported device.
-final class TouchesTestsView: UIView, InitializableWithTestingViewControllerSettings {
+final class TouchesTestsView: UIView, TestingView {
     let scrollView = UIScrollView()
     let simpleContainerView = UIView()
     let transformedContainerView = UIView()
@@ -56,7 +56,7 @@ final class TouchesTestsView: UIView, InitializableWithTestingViewControllerSett
         
         targetView.frame = CGRect(x: 30, y: 40, width: 3, height: 3)
         
-        targetView.testability_customValues["centerToWindow"] = targetView.convert(targetView.bounds.mb_center, to: nil)
+        targetView.mb_testability_customValues["centerToWindow"] = targetView.convert(targetView.bounds.mb_center, to: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

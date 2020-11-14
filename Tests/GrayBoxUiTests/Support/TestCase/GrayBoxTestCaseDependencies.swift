@@ -5,6 +5,7 @@ import MixboxIpcCommon
 import MixboxGray
 import MixboxFoundation
 import MixboxDi
+import TestsIpc
 
 final class GrayBoxTestCaseDependencies: DependencyCollectionRegisterer {
     private let bundleResourcePathProviderForTestsTarget: BundleResourcePathProvider
@@ -13,20 +14,15 @@ final class GrayBoxTestCaseDependencies: DependencyCollectionRegisterer {
         self.bundleResourcePathProviderForTestsTarget = bundleResourcePathProviderForTestsTarget
     }
     
-    private func nestedRegisteres() -> [DependencyCollectionRegisterer] {
+    private func nestedRegisterers() -> [DependencyCollectionRegisterer] {
         return [
-            MixboxGrayDependencies(
-                mixboxUiTestsFoundationDependencies: MixboxUiTestsFoundationDependencies(
-                    stepLogger: Singletons.stepLogger,
-                    enableXctActivityLogging: Singletons.enableXctActivityLogging
-                )
-            ),
+            MixboxGray.GrayBoxDependencies(),
             UiTestCaseDependencies()
         ]
     }
     
     func register(dependencyRegisterer di: DependencyRegisterer) {
-        nestedRegisteres().forEach { $0.register(dependencyRegisterer: di) }
+        nestedRegisterers().forEach { $0.register(dependencyRegisterer: di) }
         
         di.register(type: IpcRouterHolder.self) { _ in
             IpcRouterHolder()
@@ -44,39 +40,8 @@ final class GrayBoxTestCaseDependencies: DependencyCollectionRegisterer {
                 springboard: mainUiKitHierarchy // TODO: This is wrong!
             )
         }
-        
-        di.register(type: CompoundBridgedUrlProtocolClass.self) { _ in
-            CompoundBridgedUrlProtocolClass()
-        }
-        di.register(type: UrlProtocolStubAdder.self) { di in
-            let compoundBridgedUrlProtocolClass = CompoundBridgedUrlProtocolClass()
-            
-            let instancesRepository = IpcObjectRepositoryImpl<BridgedUrlProtocolInstance & IpcObjectIdentifiable>()
-            let classesRepository = IpcObjectRepositoryImpl<BridgedUrlProtocolClass & IpcObjectIdentifiable>()
-            
-            return UrlProtocolStubAdderImpl(
-                bridgedUrlProtocolRegisterer: IpcBridgedUrlProtocolRegisterer(
-                    ipcClient: try di.resolve(),
-                    writeableClassesRepository: classesRepository.toStorable()
-                ),
-                rootBridgedUrlProtocolClass: compoundBridgedUrlProtocolClass,
-                bridgedUrlProtocolClassRepository: compoundBridgedUrlProtocolClass,
-                ipcRouterProvider: try di.resolve(),
-                ipcMethodHandlersRegisterer: NetworkMockingIpcMethodsRegisterer(
-                    readableInstancesRepository: instancesRepository.toStorable { $0 },
-                    writeableInstancesRepository: instancesRepository.toStorable(),
-                    readableClassesRepository: classesRepository.toStorable { $0 },
-                    ipcClient: try di.resolve()
-                )
-            )
-        }
-        di.register(type: LegacyNetworking.self) { [bundleResourcePathProviderForTestsTarget] di in
-            GrayBoxLegacyNetworking(
-                urlProtocolStubAdder: try di.resolve(),
-                testFailureRecorder: try di.resolve(),
-                waiter: try di.resolve(),
-                bundleResourcePathProvider: bundleResourcePathProviderForTestsTarget
-            )
+        di.register(type: BundleResourcePathProvider.self) { [bundleResourcePathProviderForTestsTarget] _ in
+            bundleResourcePathProviderForTestsTarget
         }
     }
 }

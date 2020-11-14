@@ -1,3 +1,5 @@
+import UIKit
+
 public protocol InteractionFailureResultFactory: class {
     func elementIsHiddenResult()
         -> InteractionResult
@@ -5,7 +7,7 @@ public protocol InteractionFailureResultFactory: class {
     func elementIsNotSufficientlyVisibleResult(
         percentageOfVisibleArea: CGFloat,
         minimalPercentageOfVisibleArea: CGFloat,
-        scrollingFailureMessage: String?)
+        potentialCauseOfFailure: String?)
         -> InteractionResult
     
     func elementIsNotFoundResult()

@@ -3,6 +3,7 @@ import MixboxIpcCommon
 
 // It is actually a while-loop extracted into a class.
 // It become not valid after first call of `scrollIfNeeded()`.
+// swiftlint:disable:next type_body_length
 final class ScrollingContext {
     private let maxScrollingAttempts = 100
     private let scrollingHintsProvider: ScrollingHintsProvider
@@ -12,6 +13,8 @@ final class ScrollingContext {
     private let expectedIndexOfSnapshotInResolvedElementQuery: Int
     private let applicationFrameProvider: ApplicationFrameProvider
     private let eventGenerator: EventGenerator
+    private let interactionCoordinates: InteractionCoordinates?
+    private let useHundredPercentAccuracyInVisibilityCheckForTargetElement: Bool
     
     // MARK: - State
     private var status: ScrollingResult.Status?
@@ -44,7 +47,9 @@ final class ScrollingContext {
         minimalPercentageOfVisibleArea: CGFloat,
         applicationFrameProvider: ApplicationFrameProvider,
         eventGenerator: EventGenerator,
-        elementResolver: ElementResolver)
+        elementResolver: ElementResolver,
+        interactionCoordinates: InteractionCoordinates?,
+        useHundredPercentAccuracyInVisibilityCheckForTargetElement: Bool)
     {
         self.snapshot = snapshot
         self.expectedIndexOfSnapshotInResolvedElementQuery = expectedIndexOfSnapshotInResolvedElementQuery
@@ -55,6 +60,8 @@ final class ScrollingContext {
         self.applicationFrameProvider = applicationFrameProvider
         self.eventGenerator = eventGenerator
         self.elementResolver = elementResolver
+        self.interactionCoordinates = interactionCoordinates
+        self.useHundredPercentAccuracyInVisibilityCheckForTargetElement = useHundredPercentAccuracyInVisibilityCheckForTargetElement
     }
     
     func scrollIfNeeded() -> ScrollingResult {
@@ -237,22 +244,33 @@ final class ScrollingContext {
                     let targetElementIdentifier = snapshot.uniqueIdentifier.valueIfAvailable
                 {
                     let isTargetElement = (elementUniqueIdentifier == targetElementIdentifier)
+                    let minimalPercentageOfVisibleArea: CGFloat = 1
                     
-                    let percentageOfVisibleArea = elementVisibilityChecker.percentageOfVisibleArea(
-                        elementUniqueIdentifier: elementUniqueIdentifier
+                    let elementVisibilityCheckerResultOrNil = try? elementVisibilityChecker.checkVisibility(
+                        elementUniqueIdentifier: elementUniqueIdentifier,
+                        interactionCoordinates: isTargetElement ? interactionCoordinates : nil,
+                        useHundredPercentAccuracy: isTargetElement
+                            ? useHundredPercentAccuracyInVisibilityCheckForTargetElement
+                            : false
                     )
                     
-                    let elementIsSufficientlyVisible = percentageOfVisibleArea >= 1
-                    
-                    if elementIsSufficientlyVisible {
-                        viewIdsToSkip.insert(elementUniqueIdentifier)
+                    if let elementVisibilityCheckerResult = elementVisibilityCheckerResultOrNil {
+                        let elementIsSufficientlyVisible = elementVisibilityCheckerResult.percentageOfVisibleArea >= minimalPercentageOfVisibleArea
                         
-                        if isTargetElement {
-                            status = .alreadyVisible(percentageOfVisibleArea: percentageOfVisibleArea)
-                            break
+                        if elementIsSufficientlyVisible {
+                            viewIdsToSkip.insert(elementUniqueIdentifier)
+                            
+                            if isTargetElement {
+                                status = .alreadyVisible(elementVisibilityCheckerResult)
+                                break
+                            } else {
+                                continue
+                            }
                         } else {
-                            continue
+                            // do nothing
                         }
+                    } else {
+                        // do nothing
                     }
                 }
                 

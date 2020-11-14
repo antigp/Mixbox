@@ -1,3 +1,6 @@
+import MixboxIpcCommon
+import UIKit
+
 public final class PerformerOfSpecificImplementationOfInteractionForVisibleElementImpl:
     PerformerOfSpecificImplementationOfInteractionForVisibleElement
 {
@@ -22,6 +25,7 @@ public final class PerformerOfSpecificImplementationOfInteractionForVisibleEleme
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     public func performInteractionForVisibleElement(
         overridenPercentageOfVisibleArea: CGFloat?,
+        interactionCoordinates: InteractionCoordinates?,
         resolvedElementQuery: ResolvedElementQuery,
         interactionSpecificImplementation: InteractionSpecificImplementation,
         interactionMarkableAsImpossibleToRetry: MarkableAsImpossibleToRetry)
@@ -58,50 +62,87 @@ public final class PerformerOfSpecificImplementationOfInteractionForVisibleEleme
                 snapshot: snapshot,
                 minimalPercentageOfVisibleArea: minimalPercentageOfVisibleArea,
                 expectedIndexOfSnapshotInResolvedElementQuery: expectedIndexOfSnapshot,
-                resolvedElementQuery: resolvedElementQuery
+                resolvedElementQuery: resolvedElementQuery,
+                interactionCoordinates: interactionCoordinates
             )
             
-            var scrollingFailureMessage: String?
-            var alreadyCalculatedPercentageOfVisibleArea: CGFloat?
+            var potentialCauseOfFailure: String?
+            var alreadyCalculatedElementVisibilityCheckerResult: ElementVisibilityCheckerResult?
             
             snapshot = scrollingResult.updatedSnapshot
             resolvedElementQuery = scrollingResult.updatedResolvedElementQuery
             
             switch scrollingResult.status {
-            case .scrolled:
+            case .scrolled, .alreadyInHierarchyAndVisibilityCheckIsNotRequired:
                 // Ok
                 break
-            case .alreadyVisible(let percentageOfVisibleArea):
-                alreadyCalculatedPercentageOfVisibleArea = percentageOfVisibleArea
+            case .alreadyVisible(let elementVisibilityCheckerResult):
+                alreadyCalculatedElementVisibilityCheckerResult = elementVisibilityCheckerResult
             case .elementWasLostAfterScroll:
-                scrollingFailureMessage = "ошибка при автоскролле - элемент пропал из иерархии после скролла"
+                potentialCauseOfFailure = "ошибка при автоскролле - элемент пропал из иерархии после скролла"
             case .error(let message):
-                scrollingFailureMessage = message
+                potentialCauseOfFailure = message
             }
             
-            let percentageOfVisibleArea = alreadyCalculatedPercentageOfVisibleArea
-                ?? elementVisibilityChecker.percentageOfVisibleArea(snapshot: snapshot)
-            
-            let elementIsSufficientlyVisible = percentageOfVisibleArea >= minimalPercentageOfVisibleArea
-            
-            if elementIsSufficientlyVisible {
-                let result = interactionSpecificImplementation.perform(
-                    snapshot: snapshot
-                )
+            do {
+                let visiblePoint: CGPoint?
                 
-                switch result {
-                case .success:
-                    return .success
-                case .failure(let interactionFailure):
-                    return interactionFailureResultFactory.failureResult(
-                        interactionFailure: interactionFailure
+                func performInteraction() -> InteractionResult {
+                    let result = interactionSpecificImplementation.perform(
+                        resolverResult: SnapshotForInteractionResolverResult(
+                            visiblePoint: visiblePoint,
+                            elementSnapshot: snapshot
+                        )
                     )
+                    
+                    switch result {
+                    case .success:
+                        return .success
+                    case .failure(let interactionFailure):
+                        return interactionFailureResultFactory.failureResult(
+                            interactionFailure: interactionFailure
+                        )
+                    }
                 }
-            } else {
+                
+                // If visibility is not required, do not do the check.
+                if minimalPercentageOfVisibleArea <= 0 && interactionCoordinates == nil {
+                    // The following line is valid because `interactionCoordinates == nil`
+                    visiblePoint = nil
+                    
+                    return performInteraction()
+                } else {
+                    let elementVisibilityCheckerResult: ElementVisibilityCheckerResult
+                    
+                    if let alreadyCalculatedElementVisibilityCheckerResult = alreadyCalculatedElementVisibilityCheckerResult {
+                        elementVisibilityCheckerResult = alreadyCalculatedElementVisibilityCheckerResult
+                    } else {
+                        elementVisibilityCheckerResult = try elementVisibilityChecker.checkVisibility(
+                            snapshot: snapshot,
+                            interactionCoordinates: interactionCoordinates,
+                            useHundredPercentAccuracy: elementSettings.pixelPerfectVisibilityCheck
+                        )
+                    }
+                    
+                    visiblePoint = elementVisibilityCheckerResult.visibilePointOnScreenClosestToInteractionCoordinates
+                    
+                    let elementIsSufficientlyVisible = elementVisibilityCheckerResult.percentageOfVisibleArea >= minimalPercentageOfVisibleArea
+                    
+                    if !elementIsSufficientlyVisible {
+                        return interactionFailureResultFactory.elementIsNotSufficientlyVisibleResult(
+                            percentageOfVisibleArea: elementVisibilityCheckerResult.percentageOfVisibleArea,
+                            minimalPercentageOfVisibleArea: minimalPercentageOfVisibleArea,
+                            potentialCauseOfFailure: potentialCauseOfFailure
+                        )
+                    } else {
+                        return performInteraction()
+                    }
+                }
+            } catch {
                 return interactionFailureResultFactory.elementIsNotSufficientlyVisibleResult(
-                    percentageOfVisibleArea: percentageOfVisibleArea,
+                    percentageOfVisibleArea: 0,
                     minimalPercentageOfVisibleArea: minimalPercentageOfVisibleArea,
-                    scrollingFailureMessage: scrollingFailureMessage
+                    potentialCauseOfFailure: "\(error)"
                 )
             }
         } else {

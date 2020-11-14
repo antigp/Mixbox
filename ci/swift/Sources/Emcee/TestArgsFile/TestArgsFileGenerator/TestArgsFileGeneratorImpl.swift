@@ -1,4 +1,3 @@
-import Models
 import TestDiscovery
 import Foundation
 import CiFoundation
@@ -10,6 +9,8 @@ import RunnerModels
 import QueueModels
 import SimulatorPoolModels
 import TypedResourceLocation
+import LoggingSetup
+import WorkerCapabilitiesModels
 
 public final class TestArgFileGeneratorImpl: TestArgFileGenerator {
     private let emceeProvider: EmceeProvider
@@ -59,15 +60,14 @@ public final class TestArgFileGeneratorImpl: TestArgFileGenerator {
             buildArtifacts: try buildArtifacts(arguments: arguments),
             environment: arguments.environment,
             testType: arguments.testType,
-            priority: arguments.priority,
-            fbxctestUrl: arguments.fbxctestUrl
+            priority: arguments.priority
         )
     }
     
     private func testDestinationConfigurations(
         arguments: TestArgFileGeneratorArguments)
         throws
-        -> [TestDestinationConfiguration]
+    -> [TestDestinationConfiguration]
     {
         return try arguments.mixboxTestDestinationConfigurations.map {
             TestDestinationConfiguration(
@@ -75,7 +75,7 @@ public final class TestArgFileGeneratorImpl: TestArgFileGenerator {
                     deviceType: $0.testDestination.deviceType,
                     runtime: $0.testDestination.iOSVersion
                 ),
-                reportOutput: Models.ReportOutput(
+                reportOutput: ReportOutput(
                     junit: $0.reportOutput.junit,
                     tracingReport: $0.reportOutput.tracingReport
                 )
@@ -89,14 +89,18 @@ public final class TestArgFileGeneratorImpl: TestArgFileGenerator {
         buildArtifacts: BuildArtifacts,
         environment: [String: String],
         testType: TestType,
-        priority: UInt,
-        fbxctestUrl: URL)
+        priority: UInt)
         throws
         -> TestArgFile
     {
         return TestArgFile(
-            entries: try testDestinationConfigurations.map { testDestinationConfiguration -> TestArgFile.Entry in
-                try TestArgFile.Entry(
+            analyticsConfiguration: AnalyticsConfiguration(
+                graphiteConfiguration: nil,
+                statsdConfiguration: nil,
+                sentryConfiguration: nil
+            ),
+            entries: try testDestinationConfigurations.map { testDestinationConfiguration -> TestArgFileEntry in
+                try TestArgFileEntry(
                     buildArtifacts: buildArtifacts,
                     developerDir: try developerDirProvider.developerDir(),
                     environment: environment,
@@ -104,22 +108,34 @@ public final class TestArgFileGeneratorImpl: TestArgFileGenerator {
                     pluginLocations: Set(),
                     scheduleStrategy: .progressive,
                     simulatorControlTool: SimulatorControlTool(
-                        location: .insideEmceeTempFolder,
+                        location: .insideUserLibrary,
                         tool: .simctl
                     ),
                     simulatorOperationTimeouts: simulatorOperationTimeoutsProvider.simulatorOperationTimeouts(),
                     simulatorSettings: simulatorSettingsProvider.simulatorSettings(),
                     testDestination: testDestinationConfiguration.testDestination,
-                    testRunnerTool: .fbxctest(FbxctestLocation(.remoteUrl(fbxctestUrl))),
+                    testRunnerTool: .xcodebuild(nil),
                     testTimeoutConfiguration: TestTimeoutConfiguration(
                         singleTestMaximumDuration: 420,
                         testRunnerMaximumSilenceDuration: 420
                     ),
                     testType: testType,
-                    testsToRun: testsToRun
+                    testsToRun: testsToRun,
+                    workerCapabilityRequirements: [
+                        WorkerCapabilityRequirement(
+                            capabilityName: "emcee.dt.xcode.12_0_1",
+                            constraint: .present
+                        )
+                    ]
                 )
             },
-            priority: try Priority(intValue: priority),
+            prioritizedJob: PrioritizedJob(
+                jobGroupId: JobGroupId(UUID().uuidString),
+                jobGroupPriority: try Priority(intValue: priority),
+                jobId: JobId(UUID().uuidString),
+                jobPriority: try Priority(intValue: priority),
+                persistentMetricsJobId: "MixboxTests"
+            ),
             testDestinationConfigurations: testDestinationConfigurations
         )
     }
@@ -165,8 +181,8 @@ public final class TestArgFileGeneratorImpl: TestArgFileGenerator {
         
         return try emcee.dump(
             arguments: EmceeDumpCommandArguments(
+                jobId: UUID().uuidString,
                 xctestBundle: arguments.xctestBundlePath,
-                fbxctest: arguments.fbxctestUrl.absoluteString,
                 testDestinationConfigurations: testDestinationConfigurations,
                 appPath: appPathDumpArgument,
                 tempFolder: temporaryFileProvider.temporaryFilePath()

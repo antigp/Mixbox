@@ -1,5 +1,7 @@
 import MixboxInAppServices
+import MixboxIpcCommon
 import MixboxUiTestsFoundation
+import MixboxTestsFoundation
 import TestsIpc
 import XCTest
 import MixboxIpc
@@ -69,16 +71,14 @@ final class KeyboardEventInjectorImplTests: TestCase {
             return
         }
         
-        guard let keyboardEventInjector = appDelegate.keyboardEventInjector else {
-            XCTFail("keyboardEventInjector in app delegate is nil. app delegate: \(appDelegate)")
-            return
-        }
-        
         assertDoesntThrow {
+            let keyboardEventInjector: KeyboardEventInjector = try appDelegate.inAppServicesDependencyInjection.resolve()
+            
             let synchronousKeyboardEventInjector = SynchronousKeyboardEventInjectorImpl(
                 keyboardEventInjector: keyboardEventInjector,
                 runLoopSpinningWaiter: waiter
             )
+            
             try synchronousKeyboardEventInjector.inject(builder: builder)
         }
     }

@@ -1,3 +1,5 @@
+import UIKit
+
 public final class WaitingForQuiescenceTestsViewConfiguration: Codable {
     public final class TapIndicatorButton: Codable {
         public let id: String
@@ -22,6 +24,7 @@ public final class WaitingForQuiescenceTestsViewConfiguration: Codable {
         case present(animated: Bool)
         case setContentOffsetAnimated(offset: CGFloat)
         case withCoreAnimation(AnimationType)
+        case showKeyboard
         
         public var id: String {
             switch self {
@@ -33,6 +36,8 @@ public final class WaitingForQuiescenceTestsViewConfiguration: Codable {
                 return "setContentOffset_" + "\(offset)"
             case let .withCoreAnimation(animationType):
                 return "withCoreAnimation_" + animationType.rawValue
+            case .showKeyboard:
+                return "showKeyboard"
             }
         }
 
@@ -48,6 +53,7 @@ public final class WaitingForQuiescenceTestsViewConfiguration: Codable {
         case present
         case setContentOffsetAnimated
         case withCoreAnimation
+        case showKeyboard
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -65,6 +71,8 @@ public final class WaitingForQuiescenceTestsViewConfiguration: Codable {
         case .withCoreAnimation(let nested):
             try container.encode(CaseId.withCoreAnimation, forKey: .caseId)
             try container.encode(nested, forKey: .data)
+        case .showKeyboard:
+            try container.encode(CaseId.showKeyboard, forKey: .caseId)
         }
     }
 
@@ -85,6 +93,8 @@ public final class WaitingForQuiescenceTestsViewConfiguration: Codable {
         case .withCoreAnimation:
             let nested = try container.decode(AnimationType.self, forKey: .data)
             self = .withCoreAnimation(nested)
+        case .showKeyboard:
+            self = .showKeyboard
         }
     }
 // sourcery:end

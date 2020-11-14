@@ -1,4 +1,5 @@
 import MixboxUiTestsFoundation
+import MixboxTestsFoundation
 
 public final class TapIndicatorButtonElement:
     BaseElementWithDefaultInitializer,
@@ -6,8 +7,8 @@ public final class TapIndicatorButtonElement:
     ElementWithText,
     ElementWithEnabledState
 {
-    public func assert(isTapped: Bool) {
-        assertMatches {
+    public func assert(isTapped: Bool, file: StaticString = #file, line: UInt = #line) {
+        assertMatches(file: file, line: line) {
             $0.customValues["isTapped"] == isTapped
         }
     }
