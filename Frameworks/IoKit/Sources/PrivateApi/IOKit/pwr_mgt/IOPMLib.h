@@ -25,6 +25,7 @@
 
 #include <CoreFoundation/CFArray.h>
 #if SWIFT_PACKAGE
+#include "../IOCFPlugIn.h"
 #else
 #include "IOKitLib.h"
 #include "IOPMLibDefs.h"
