@@ -2,10 +2,8 @@
 
 #import "NSObject+TestabilityElement.h"
 #import <objc/runtime.h>
-
 @class NSObjectTestabilityElementSwiftImplementation;
 
-#import <MixboxTestability/MixboxTestability-Swift.h>
 
 @implementation NSObject (Testability)
 
@@ -69,8 +67,8 @@
     return [self.impl mb_testability_parent];
 }
 
-- (NSObjectTestabilityElementSwiftImplementation *)impl {
-    return [[NSObjectTestabilityElementSwiftImplementation alloc] initWithNsObject:self];
+- (id)impl {
+    return [[NSClassFromString(@"NSObjectTestabilityElementSwiftImplementation") alloc] performSelector:@selector(initWithNsObject:) withObject:self];
 }
 
 @end

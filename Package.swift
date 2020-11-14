@@ -31,10 +31,11 @@ let package = Package(
         .library(name: "MixboxDi", type: .static, targets: ["MixboxDi"]),
         .library(name: "MixboxFakeSettingsAppMain", type: .static, targets: ["MixboxFakeSettingsAppMain"]),
         .library(name: "MixboxFoundation", type: .static, targets: ["MixboxFoundation"]),
-        .library(name: "MixboxGenerator", type: .static, targets: ["MixboxGenerator"]),
+        .library(name: "MixboxGenerators", type: .static, targets: ["MixboxGenerators"]),
         .library(name: "MixboxGray", type: .static, targets: ["MixboxGray"]),
         .library(name: "MixboxInAppServices", type: .static, targets: ["MixboxInAppServices", "MixboxInAppServices_objc"]),
-        .library(name: "MixboxIoKit", type: .static, targets: ["MixboxIoKit","MixboxIoKit_objc"]),
+        .library(name: "MixboxIoKit_objc", type: .static, targets: ["MixboxIoKit_objc"]),
+        .library(name: "MixboxIoKit", type: .static, targets: ["MixboxIoKit_objc", "MixboxIoKit"]),
         .library(name: "MixboxIpc", type: .static, targets: ["MixboxIpc"]),
         .library(name: "MixboxIpcCommon", type: .static, targets: ["MixboxIpcCommon"]),
         .library(name: "MixboxIpcSbtuiClient", type: .static, targets: ["MixboxIpcSbtuiClient"]),
@@ -153,11 +154,11 @@ let package = Package(
                 linkerSettings: [.linkedFramework("Foundation")] ),
         
         // MARK: - MixboxGenerator
-        .target(name: "MixboxGenerator",
+        .target(name: "MixboxGenerators",
                 dependencies: [
                     .target(name: "MixboxDi")
                 ],
-                path: "Frameworks/Generator",
+                path: "Frameworks/Generators",
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
                 swiftSettings: swiftSettings()),
@@ -195,7 +196,6 @@ let package = Package(
         .target(name: "MixboxInAppServices_objc",
                 dependencies: [
                     .target(name: "MixboxIpcCommon"),
-                    .target(name: "MixboxTestability"),
                     .target(name: "MixboxIpcSbtuiHost"),
                     .target(name: "MixboxBuiltinIpc"),
                     .target(name: "MixboxIoKit"),
@@ -216,7 +216,6 @@ let package = Package(
         .target(name: "MixboxInAppServices",
                 dependencies: [
                     .target(name: "MixboxIpcCommon"),
-                    .target(name: "MixboxTestability"),
                     .target(name: "MixboxIpcSbtuiHost"),
                     .target(name: "MixboxBuiltinIpc"),
                     .target(name: "MixboxIoKit"),
@@ -317,7 +316,8 @@ let package = Package(
                 ],
                 path: "Frameworks/Testability",
                 sources: [
-                    "Sources/CommonValues/NSObject+Testability.m"
+                    "Sources/CommonValues/NSObject+Testability.m",
+                    "Sources/CommonValues/Support/ObjectiveC"
                 ],
                 publicHeadersPath: ".",
                 cSettings: cSettings(),
@@ -325,11 +325,15 @@ let package = Package(
                 swiftSettings: swiftSettings()),
         .target(name: "MixboxTestability",
                 dependencies: [
-                    .target(name: "MixboxTestability_objc")
+                    .target(name: "MixboxTestability_objc"),
+                    .target(name: "MixboxFoundation"),
+                    .target(name: "MixboxUiKit"),
+                    .target(name: "MixboxInAppServices")
                 ],
                 path: "Frameworks/Testability",
                 exclude: [
-                    "Sources/CommonValues/NSObject+Testability.m"
+                    "Sources/CommonValues/NSObject+Testability.m",
+                    "Sources/CommonValues/Support/ObjectiveC"
                 ],
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
