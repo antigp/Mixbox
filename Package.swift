@@ -94,7 +94,7 @@ let package = Package(
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
                 swiftSettings: swiftSettings(),
-                linkerSettings: [.linkedFramework("XCTest")]),
+                linkerSettings: [.linkedFramework("XCTest")]), 
         .target(name: "MixboxBlack",
                 dependencies: [
                     .target(name: "MixboxUiTestsFoundation"),
