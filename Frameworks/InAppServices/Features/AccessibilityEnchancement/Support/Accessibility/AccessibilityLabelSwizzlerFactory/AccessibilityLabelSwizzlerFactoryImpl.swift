@@ -29,13 +29,13 @@ public class AccessibilityLabelSwizzlerFactoryImpl: AccessibilityLabelSwizzlerFa
         
         let os = iosVersionProvider.iosVersion().majorVersion
         switch os {
-        case 10:
+        case 10, 14:
             return ios10AccessibilityLabelSwizzler(
                 accessibilityLabelFunctionReplacement: accessibilityLabelFunctionReplacement,
                 objcRuntimeObjcMethodsWithUniqueImplementationProvider: objcRuntimeObjcMethodsWithUniqueImplementationProvider,
                 predefinedObjcMethodsWithUniqueImplementationProvider: predefinedObjcMethodsWithUniqueImplementationProvider
             )
-        case 11, 12, 13, 14:
+        case 11, 12, 13:
             return ios11OrHigherAccessibilityLabelSwizzler(
                 accessibilityLabelFunctionReplacement: accessibilityLabelFunctionReplacement,
                 objcRuntimeObjcMethodsWithUniqueImplementationProvider: objcRuntimeObjcMethodsWithUniqueImplementationProvider,
