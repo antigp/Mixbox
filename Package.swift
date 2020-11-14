@@ -43,6 +43,7 @@ let package = Package(
         .library(name: "MixboxBlack", type: .static, targets: ["MixboxBlack"]),
         .library(name: "MixboxBuiltinIpc", type: .static, targets: ["MixboxBuiltinIpc"]),
         .library(name: "MixboxDi", type: .static, targets: ["MixboxDi"]),
+        .library(name: "MixboxBuiltinDi", type: .static, targets: ["MixboxBuiltinDi"]),
         .library(name: "MixboxFakeSettingsAppMain", type: .static, targets: ["MixboxFakeSettingsAppMain"]),
         .library(name: "MixboxFoundation", type: .static, targets: ["MixboxFoundation"]),
         .library(name: "MixboxGenerators", type: .static, targets: ["MixboxGenerators"]),
@@ -134,6 +135,17 @@ let package = Package(
                     .target(name: "MixboxFoundation")
                 ],
                 path: "Frameworks/Di",
+                cSettings: cSettings(),
+                cxxSettings: cxxSettings(),
+                swiftSettings: swiftSettings()),
+        
+        // MARK: - MixboxDi
+        .target(name: "MixboxBuiltinDi",
+                dependencies: [
+                    .target(name: "MixboxDi"),
+                    .target(name: "MixboxFoundation")
+                ],
+                path: "Frameworks/BuiltinDi",
                 cSettings: cSettings(),
                 cxxSettings: cxxSettings(),
                 swiftSettings: swiftSettings()),
