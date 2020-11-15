@@ -13,9 +13,10 @@ public final class NonViewVisibilityCheckerImpl: NonViewVisibilityChecker {
     }
     
     public func checkVisibility(element: TestabilityElement) throws -> NonViewVisibilityCheckerResult {
-        if isDefinitelyHidden(element: element) {
-            return notVisibleResult()
-        }
+        //Not work correctly
+//        if isDefinitelyHidden(element: element) {
+//            return notVisibleResult()
+//        }
 
         let searchRectInScreenCoordinates = element.mb_testability_frameRelativeToScreen()
 
