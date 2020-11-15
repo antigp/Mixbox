@@ -44,7 +44,8 @@ final class TccDb {
                 keys.client <- bundleId,
                 keys.clientType <- 0, // i don't know what this means
                 keys.allowed <- isAllowed ? 1 : 0,
-                keys.promptCount <- 1,
+                keys.authReason <- 4,
+                keys.authVersion <- 1,
                 keys.csreq <- nil,
                 keys.policyId <- nil
             )
