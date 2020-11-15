@@ -56,7 +56,7 @@ public final class ViewVisibilityCheckerImpl: ViewVisibilityChecker {
             
             let searchRectInScreenCoordinates = arguments.view.accessibilityFrame
 
-            if arguments.view.window is UITextEffectsWindow {
+            if arguments.view.window != UIApplication.shared.keyWindow {
                 // In input view in keyboard
                 let screenBounds = screen.bounds
             } else {
