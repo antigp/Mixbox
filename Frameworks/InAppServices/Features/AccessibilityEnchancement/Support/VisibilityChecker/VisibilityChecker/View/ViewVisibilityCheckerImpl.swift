@@ -30,6 +30,7 @@ public final class ViewVisibilityCheckerImpl: ViewVisibilityChecker {
     private let performanceLogger: PerformanceLogger
     private let visibilityCheckForLoopOptimizerFactory: VisibilityCheckForLoopOptimizerFactory
     private let screen: UIScreen
+    private let keyboardFrameService = KeyboardFrameService()
     
     public init(
         assertionFailureRecorder: AssertionFailureRecorder,
@@ -55,7 +56,7 @@ public final class ViewVisibilityCheckerImpl: ViewVisibilityChecker {
             
             let searchRectInScreenCoordinates = arguments.view.accessibilityFrame
 
-            let screenBounds = screen.bounds
+            let screenBounds = screen.bounds.mb_cutBottom(keyboardFrameService.nextKeyboardFrameInWindow)
 
             // TODO: Add this check in MixboxUiTestssFoundation to not call IPC if not needed?
             //       It seems that something was broken somewhere after recent refactorings, because
