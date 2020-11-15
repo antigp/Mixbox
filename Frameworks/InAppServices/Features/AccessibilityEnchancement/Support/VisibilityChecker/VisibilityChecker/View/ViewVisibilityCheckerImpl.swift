@@ -55,13 +55,13 @@ public final class ViewVisibilityCheckerImpl: ViewVisibilityChecker {
             }
             
             let searchRectInScreenCoordinates = arguments.view.accessibilityFrame
-
+            let screenBounds: CGRect
             if arguments.view.window != UIApplication.shared.keyWindow {
                 // In input view in keyboard
-                let screenBounds = screen.bounds
+                screenBounds = screen.bounds
             } else {
                 // exclude keyboard
-                let screenBounds = screen.bounds.mb_cutBottom(keyboardFrameService.nextKeyboardFrameInWindow)
+                screenBounds = screen.bounds.mb_cutBottom(keyboardFrameService.nextKeyboardFrameInWindow)
             }
             
 
