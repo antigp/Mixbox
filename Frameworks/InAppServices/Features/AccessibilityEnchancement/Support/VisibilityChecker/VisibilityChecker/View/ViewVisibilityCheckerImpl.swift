@@ -56,7 +56,14 @@ public final class ViewVisibilityCheckerImpl: ViewVisibilityChecker {
             
             let searchRectInScreenCoordinates = arguments.view.accessibilityFrame
 
-            let screenBounds = screen.bounds.mb_cutBottom(keyboardFrameService.nextKeyboardFrameInWindow)
+            if arguments.view.window is UITextEffectsWindow {
+                // In input view in keyboard
+                let screenBounds = screen.bounds
+            } else {
+                // exclude keyboard
+                let screenBounds = screen.bounds.mb_cutBottom(keyboardFrameService.nextKeyboardFrameInWindow)
+            }
+            
 
             // TODO: Add this check in MixboxUiTestssFoundation to not call IPC if not needed?
             //       It seems that something was broken somewhere after recent refactorings, because
