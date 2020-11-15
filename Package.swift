@@ -161,8 +161,10 @@ let package = Package(
                     "Dip",
                     .target(name: "MixboxFoundation"),
                 ],
-                path: "Frameworks/FakeSettingsAppMain"),
-        
+                path: "Frameworks/FakeSettingsAppMain",
+                sources: ["."],
+                publicHeadersPath: "."
+        ),
         // MARK: - MixboxFoundation
         .target(name: "MixboxFoundation_objc",
                 dependencies: [
