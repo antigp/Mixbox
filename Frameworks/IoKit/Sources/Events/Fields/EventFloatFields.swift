@@ -10,10 +10,10 @@ public final class EventFloatFields {
     
     public subscript(_ field: IOHIDEventField) -> Double {
         get {
-            return IOHIDEventGetFloatValue(iohidEventRef, field)
+            return Double(IOHIDEventGetFloatValue(iohidEventRef, field))
         }
         set {
-            IOHIDEventSetFloatValue(iohidEventRef, field, newValue)
+            IOHIDEventSetFloatValue(iohidEventRef, field, Float(newValue))
         }
     }
 }
