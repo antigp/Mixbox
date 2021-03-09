@@ -45,7 +45,7 @@ public final class DigitizerEvent: BaseDigitizerEvent {
                 Float(y),
                 Float(z),
                 Float(tipPressure),
-                twist,
+                Float(twist),
                 range,
                 touch,
                 options.iohidEventOptionBits
