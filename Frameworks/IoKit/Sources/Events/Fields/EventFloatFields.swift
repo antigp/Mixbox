@@ -13,7 +13,7 @@ public final class EventFloatFields {
             return Double(IOHIDEventGetFloatValue(iohidEventRef, field))
         }
         set {
-            IOHIDEventSetFloatValue(iohidEventRef, field, Float(newValue))
+            IOHIDEventSetFloatValue(iohidEventRef, field, IOHIDFloat(newValue))
         }
     }
 }
